@@ -162,8 +162,11 @@ class Cadastro extends Dados
 		{
 			ValidarCampos::campoVazio($this->dados['pri_descricao'],'Prioridade');
 			ValidarCampos::campoVazio($this->dados['tat_codigo'],'Tempo de Atendimento');
-			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Tempo de Atendimento');
+			
+			ValidarCampos::campoVazio($this->dados['dep_codigo_prioridade'],'Tempo de Atendimento');
 
+			$this->dados['dep_codigo'] = $this->dados['dep_codigo_prioridade'];
+			
 			$tbprioridade = new TbPrioridade();
 			$tbprioridade->insert($this->dados);
 

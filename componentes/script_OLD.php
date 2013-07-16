@@ -9,6 +9,8 @@ include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/topo1.php
 <script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/maskedinput.js"></script>
 <script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/mascaras.js"></script>
 
+<script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/ordena.js"></script>
 
 <script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/maskMoney.js"></script>
 <script type="text/javascript" src="../<?php echo($_SESSION['projeto']);?>/jscript/formataMoney.js"></script>

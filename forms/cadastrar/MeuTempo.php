@@ -25,8 +25,8 @@ Sessao::validarForm('cadastrar/meutempo');
 	      <td>
 	      	<?php 
 			$departamento = new TbDepartamento();
-			$_SESSION['cadastrar/MeuProblema']['dep_codigo'] = $_SESSION['dep_codigo'];
-	      	FormComponente::selectOption('dep_codigo',$departamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/MeuProblema']);	      	
+			$_SESSION['cadastrar/meutempo']['dep_codigo'] = $_SESSION['dep_codigo'];
+	      	FormComponente::selectOption('dep_codigo',$departamento->listarTodosDepartamentos(),false,$_SESSION['cadastrar/meutempo']);	      	
 	      	?>
 	      </td>
     </tr>        

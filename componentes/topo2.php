@@ -1,4 +1,4 @@
-<link rel='shortcut icon' href='css/images/logoico.ico'>
+
 </head>
 <body>
 

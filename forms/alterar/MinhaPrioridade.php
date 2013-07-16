@@ -25,17 +25,28 @@ $_SESSION['cadastrar/MinhaPrioridade'] = $tbprioridade->getForm(base64_decode($_
       </td>
     </tr>
     
-    <tr>
+   <tr>
+      <th align="left" nowrap="nowrap">Departamento:</th>
+	      <td>
+	      	<?php 
+			$departamento = new TbDepartamento();
+			$_SESSION['cadastrar/MinhaPrioridade']['dep_codigo_prioridade'] = $_SESSION['cadastrar/MinhaPrioridade']['dep_codigo'];
+			FormComponente::$name = 'Selecione';
+	      	FormComponente::selectOption('dep_codigo_prioridade',$departamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/MinhaPrioridade']);	      	
+	      	?>
+	      </td>
+    </tr>
+ <tr>
       <th align="left" nowrap="nowrap">Tempo de Atendimento:</th>
 	      <td>
 	      	<?php 
 	      	$tbtempoatendimento = new TbTempoAtendimento();
 	      	
-	      	FormComponente::selectOption('tat_codigo', $tbtempoatendimento->selectMeuTempoAtendimento($_SESSION['dep_codigo']),false,$_SESSION['cadastrar/MinhaPrioridade']);
+	      	FormComponente::selectOption('tat_codigo',$tbtempoatendimento->selectMeuTempoAtendimento($_SESSION['cadastrar/MinhaPrioridade']['dep_codigo']),false,$_SESSION['cadastrar/MinhaPrioridade']);
 	      	
 	      	?>
 	      </td>
-    </tr>
+    </tr>    
         
     <tr>
       <td colspan="2" align="right">

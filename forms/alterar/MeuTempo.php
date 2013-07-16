@@ -25,7 +25,15 @@ $_SESSION['cadastrar/meutempo'] = $tbtempoatendimento->getForm(base64_decode($_S
       	<input name="tat_descricao" type="text" value="<?php echo($_SESSION['cadastrar/meutempo']['tat_descricao']); ?>" />
       </td>
     </tr>
-        
+<tr>
+      <th align="left" nowrap="nowrap">Departamento:</th>
+	      <td>
+	      	<?php 
+			$departamento = new TbDepartamento();
+	      	FormComponente::selectOption('dep_codigo',$departamento->listarTodosDepartamentos(),false,$_SESSION['cadastrar/meutempo']);	      	
+	      	?>
+	      </td>
+    </tr>                
     <tr>
       <td colspan="2" align="right">
 	      <input type="submit" name="cadastrar" id="button" value="Alterar" />

@@ -28,7 +28,7 @@ $_SESSION['cadastrar/MeuProblema'] = $tbproblema->getForm(base64_decode($_SESSIO
 	      	<?php 
 			$departamento = new TbDepartamento();
 			FormComponente::$name = '';
-			$_SESSION['cadastrar/MeuProblema']['dep_codigo'] = $_SESSION['dep_codigo'];
+			$_SESSION['cadastrar/MeuProblema']['dep_codigo_problema'] = $_SESSION['cadastrar/MeuProblema']['dep_codigo'];
 	      	FormComponente::selectOption('dep_codigo_problema',$departamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/MeuProblema']);	      	
 	      	?>
 	      </td>

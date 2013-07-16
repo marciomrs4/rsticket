@@ -1,19 +1,20 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 
-include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script_prioridade.php");
+include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/novo.png" title="Nova Prioridade">','cadastrar/MinhaPrioridade');
-Texto::criarTitulo("Prioridade");
+echo FormComponente::actionButton('<img src="./css/images/new_time.png" title="Novo Tempo de Atendimento">','cadastrar/MeuTempo');
+Texto::criarTitulo("Tempo de Prioridade");
 echo "</div>";
 
 $busca = new Busca();
 $busca->validarPost($_POST);
+
 ?>
 <form action="" method="post">
 <fieldset>
-	<legend>Pesquisar Prioridade</legend>
+	<legend>Pesquisar Tempo</legend>
 <table border="0">
  
 	<tr>	
@@ -37,12 +38,11 @@ $busca->validarPost($_POST);
 <?php 
 Arquivo::includeForm();
 
-$datagrid = new DataGrid(array('Descricao','Tempo de Atendimento'),$busca->listarPrioridade());
-$datagrid->colunaoculta = 1;
-$datagrid->acao = 'alterar/MinhaPrioridade';
-$datagrid->nomelink = '<img src="./css/images/editar.gif" title="Alterar Prioridade">';
-$datagrid->mostrarDatagrid();
-
+$datagrid2 = new DataGrid(array('Tempo de Atendimento','Departamento'), $busca->listarTempo());
+$datagrid2->colunaoculta = 1;
+$datagrid2->acao = 'alterar/MeuTempo';
+$datagrid2->nomelink = '<img src="./css/images/editar.gif" title="Alterar Tempo de Atendimento">';
+$datagrid2->mostrarDatagrid();
 
 Sessao::finalizarSessao();
 

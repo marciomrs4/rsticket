@@ -42,7 +42,8 @@ class TbPrioridade extends Banco
 	{
 		$query = ("UPDATE $this->tabela
 					SET	$this->pri_descricao = ?,
-						$this->tat_codigo = ?
+						$this->tat_codigo = ?,
+						$this->dep_codigo = ?
 					WHERE $this->pri_codigo = ? ");
 		try
 		{
@@ -50,7 +51,8 @@ class TbPrioridade extends Banco
 
 			$stmt->bindParam(1,$dados[$this->pri_descricao],PDO::PARAM_STR);
 			$stmt->bindParam(2,$dados[$this->tat_codigo],PDO::PARAM_INT);
-			$stmt->bindParam(3,$dados[$this->pri_codigo],PDO::PARAM_INT);						
+			$stmt->bindParam(3,$dados[$this->dep_codigo],PDO::PARAM_INT);			
+			$stmt->bindParam(4,$dados[$this->pri_codigo],PDO::PARAM_INT);						
 				
 			$stmt->execute();
 
@@ -111,7 +113,34 @@ class TbPrioridade extends Banco
 			throw new PDOException($e->getMessage(),$e->getMessage());
 		}
 	}
+	
+	#Usado na tela de Prioridade, listar prioridade
+	public function listarPrioridades($dep_codigo)
+	{
+		$query = ("SELECT PRI.pri_codigo, PRI.pri_descricao, TEM.tat_descricao, 
+					    (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = PRI.dep_codigo) AS dep_descricao
+					FROM tb_prioridade AS PRI
+					INNER JOIN tb_tempo_atendimento AS TEM
+					ON TEM.tat_codigo = PRI.tat_codigo
+					INNER JOIN tb_departamento AS DEP
+					WHERE PRI.dep_codigo LIKE ?
+					GROUP BY pri_codigo
+				  ");
 
+		try
+		{
+			$stmt = $this->conexao->prepare($query);
+			
+			$stmt->execute(array("%$dep_codigo%"));
+
+			return($stmt);
+
+		} catch (PDOException $e)
+		{
+			throw new PDOException($e->getMessage(),$e->getMessage());
+		}
+	}
+	
 	public function select($colum,$param)
 	{
 		$query = (" ");

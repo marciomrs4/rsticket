@@ -26,7 +26,8 @@ Sessao::validarForm('cadastrar/MinhaPrioridade');
 	      	<?php 
 			$departamento = new TbDepartamento();
 			$_SESSION['cadastrar/MeuProblema']['dep_codigo'] = $_SESSION['dep_codigo'];
-	      	FormComponente::selectOption('dep_codigo',$departamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/MeuProblema']);	      	
+			FormComponente::$name = 'Selecione';
+	      	FormComponente::selectOption('dep_codigo_prioridade',$departamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/MeuProblema']);	      	
 	      	?>
 	      </td>
     </tr>

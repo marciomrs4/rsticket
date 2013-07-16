@@ -5,6 +5,8 @@
 <title>RsTicket</title>
 <link rel="stylesheet" type="text/css" href="./forms/login/view.css" media="all">
 <script type="text/javascript" src="./forms/login/view.js"></script>
+<link rel='shortcut icon' href='css/images/LogoICO.ico'>
+
 
 </head>
 <body id="main_body" >

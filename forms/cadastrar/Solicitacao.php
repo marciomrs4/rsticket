@@ -46,8 +46,8 @@ Sessao::validarForm('cadastrar/Solicitacao');
     	</td>
     </tr>
     <tr>
-      <td colspan="2" align="center">
-	      <input type="submit" name="cadastrar" class="button-tela" value="OK" />
+      <td colspan="2" align="left">
+	      <input type="submit" name="cadastrar" class="button-tela" value="Salvar" />
       </td>
     </tr>
 

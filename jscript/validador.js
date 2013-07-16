@@ -15,6 +15,7 @@ var $valida = jQuery.noConflict();
 
 $valida(document).ready( function() 
 {
+
 	$valida("#meuproblema").validate({
 		/* REGRAS DE VALIDAÇÃO DO FORMULÁRIO */
 		rules:{
@@ -49,7 +50,6 @@ $valida(document).ready( function()
 				required: true
 			}
 		},
-
 		messages:{
 			pro_titulo:{
 				required: "Preencha o campo <u>Titulo</u>",
@@ -60,40 +60,37 @@ $valida(document).ready( function()
 			}
 		}
 	});
-
-	/*Inicio de validação do formulário de solicitacao*/
-	$valida("#solicitacao").validate({
-
-		rules:{
-			dep_codigo:{
-				required: true
+	
+		/*Inicio de validação do formulário de solicitacao*/
+		$valida("#solicitacao").validate({
+			/* REGRAS DE VALIDAÇÃO DO FORMULÁRIO */
+			rules:{
+				dep_codigo:{
+					required: true
+				},
+				pro_codigo:{
+					required: true
+				},
+				sol_descricao_solicitacao:{
+					required: true,
+					minlength: 20
+				}
 			},
-			pro_codigo:{
-				required: true
-			},
-
-			sol_descricao_solicitacao:{ 
-				required: true,
-				minlength: 10
-
+			/* DEFINIÇÃO DAS MENSAGENS DE ERRO */
+			messages:{
+				dep_codigo:{
+					required: "O campo departamento é obrigatório"
+				},
+				pro_codigo:{
+					required: "O campo problema é obrigatório"
+				},
+				sol_descricao_solicitacao:{
+					required: "O campo Descrição do problema é obrigatório",
+					minlength: "O campo Descrição do problema precisa de ao menos 20 caracteres"
+				}
 			}
-		},
-
-		messages:{
-			dep_codigo:{
-				required: "O campo Departamento é obrigatório"
-			},
-			pro_codigo:{
-				required: "O Campo Problema é obrigatório"
-			},
-
-			sol_descricao_solicitacao:{ 
-				required: "A Descrição do Chamado é obrigatório",
-				minlength: "O campo Descrição deve ter ao menos 10 caracteres"
-
-			}
-		}
-	});	
-	/*Fim de validação do formulário de solicitacao*/
-
+		});
+		/*Fim de validação do formulário de solicitacao*/
+			
+	
 })(jQuery);
