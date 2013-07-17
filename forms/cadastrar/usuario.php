@@ -48,7 +48,7 @@ Sessao::validarForm('cadastrar/usuario');
 	      	<?php 
 				$tbdepartamento = new TbDepartamento();
 				FormComponente::$name = 'ESCOLHA';
-				FormComponente::selectOption('dep_codigo', $tbdepartamento->listarDepartamentos(),true,$_SESSION['cadastrar/usuario']);
+				FormComponente::selectOption('dep_codigo', $tbdepartamento->listarTodosDepartamentos(),true,$_SESSION['cadastrar/usuario']);
 	      					
 				?>
 	      </td>
