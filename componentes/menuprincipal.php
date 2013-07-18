@@ -6,10 +6,10 @@
     
 		<?php
 		$acesso = new ControleDeAcesso(); 
-        $acesso->permitirBotao("<li><a href='Solicitante.php'>Chamado</a></li>",ControleDeAcesso::$Solicitante);
-        $acesso->permitirBotao("<li><a href='Operacao.php'>Operação</a></li>",ControleDeAcesso::$Executor);
-        $acesso->permitirBotao("<li><a href='Relatorio.php'>Relatório</a></li>",ControleDeAcesso::$Executor);        
-        $acesso->permitirBotao("<li><a href='Administracao.php'>Administração</a></li>",ControleDeAcesso::$Executor);
+        $acesso->permitirBotao("<li><a href='Solicitante.php'>Chamado</a></li>",array(ControleDeAcesso::$Solicitante));
+        $acesso->permitirBotao("<li><a href='Operacao.php'>Operação</a></li>",array(ControleDeAcesso::$Tecnico,ControleDeAcesso::$TecnicoADM));
+        $acesso->permitirBotao("<li><a href='Relatorio.php'>Relatório</a></li>",array(ControleDeAcesso::$Tecnico,ControleDeAcesso::$TecnicoADM));        
+        $acesso->permitirBotao("<li><a href='Administracao.php'>Administração</a></li>",array(ControleDeAcesso::$TecnicoADM));
 
         ?>                        
     </ul>

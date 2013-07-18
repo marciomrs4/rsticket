@@ -6,8 +6,8 @@ class ControleDeAcesso extends Sessao
 	static $root = 1;
 	
 	static $Solicitante = 2;
-	static $Receptor = 3;
-	static $Executor = 4;
+	static $Tecnico = 3;
+	static $TecnicoADM = 4;
 	static $Aprovador = 5;
 	
 	public static function acessoComun()
@@ -38,7 +38,9 @@ class ControleDeAcesso extends Sessao
 
 	protected static function acessar($nivel)
 	{
-		if($_SESSION['tac_codigo'] == $nivel or $_SESSION['tac_codigo'] == self::$root )
+		#Verifica se o TAC_CODIGO esta dentro do arrau NIVEL
+		#Ou se caso seja ROOT
+		if(in_array($_SESSION['tac_codigo'],$nivel) or $_SESSION['tac_codigo'] == self::$root )
 		{}
 		else
 		{
@@ -55,7 +57,8 @@ class ControleDeAcesso extends Sessao
 
 	public static function permitirBotao($botao,$nivel)
 	{
-		if($_SESSION['tac_codigo'] == $nivel or $_SESSION['tac_codigo'] == self::$root)
+		#Verifica se o TAC_CODIGO esta dentro do arrau NIVEL
+		if(in_array($_SESSION['tac_codigo'],$nivel) or $_SESSION['tac_codigo'] == self::$root)
 		{
 			echo($botao);
 		}

@@ -1,7 +1,9 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 
-include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script_prioridade.php");
+ControleDeAcesso::permitirAcesso(array(ControleDeAcesso::$TecnicoADM));
+
+include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
 echo"<div class='sub_menu_principal'>";
 echo FormComponente::actionButton('<img src="./css/images/novo.png" title="Nova Prioridade">','cadastrar/MinhaPrioridade');

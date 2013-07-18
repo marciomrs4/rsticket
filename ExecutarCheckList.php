@@ -2,7 +2,8 @@
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 
 $ControleAcesso = new ControleDeAcesso();
-$ControleAcesso->permitirAcesso(ControleDeAcesso::$Executor);
+
+$ControleAcesso->permitirAcesso(array(ControleDeAcesso::$Tecnico,ControleDeAcesso::$TecnicoADM));
 
 include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 

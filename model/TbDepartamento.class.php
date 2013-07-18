@@ -143,6 +143,7 @@ class TbDepartamento extends Banco
 
 	}
 
+	#Usado em Cadastro de usuario e alteração de usuario
 	public function listarTodosDepartamentos()
 	{
 		$query = ("SELECT dep_codigo, dep_descricao, dep_email

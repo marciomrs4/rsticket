@@ -1,6 +1,8 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 
+ControleDeAcesso::acessoComun();
+
 include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
 Texto::criarTitulo("Minhas Informações");

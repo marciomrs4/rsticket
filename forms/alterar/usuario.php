@@ -53,7 +53,7 @@ $_SESSION['alterar/usuario'] = $tbusuario->getForm(base64_decode($_SESSION['valo
 	      	<?php 
 				$tbdepartamento = new TbDepartamento();
 				FormComponente::$name = 'ESCOLHA';
-				FormComponente::selectOption('dep_codigo', $tbdepartamento->listarDepartamentos(),true,$_SESSION['alterar/usuario']);
+				FormComponente::selectOption('dep_codigo', $tbdepartamento->listarTodosDepartamentos(),true,$_SESSION['alterar/usuario']);
 				
 				?>
 	      </td>
