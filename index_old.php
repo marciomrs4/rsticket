@@ -9,9 +9,15 @@ Texto::criarTitulo("RsTicket - Tecnologia da Informação");
 
 Texto::criarSubTitulo('Versão Beta 1.0 - 24/03/2013');
 
+
+$Email = new PHPMailer();
+
+
+
+
 Sessao::finalizarSessao();
 
-//include($_SERVER['DOCUMENT_ROOT']."/{$Projeto}/menusecundario.php");
+include($_SERVER['DOCUMENT_ROOT']."/{$Projeto}/menusecundario.php");
 include($_SERVER['DOCUMENT_ROOT']."/{$Projeto}/componentes/rodape.php");
 
 ?>

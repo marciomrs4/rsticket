@@ -279,9 +279,15 @@ class Cadastro extends Dados
 				$tbcalculoatendimento = new TbCalculoAtendimento();
 				$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
 				
+				
 				#Se tudo deu certo, faz commit
 				$this->conexao->commit();
 
+				
+				$email = new Email();
+				$email->aberturaChamado($this->dados);
+				
+				
 			}catch (PDOException $e)
 			{
 				#Se algo deu errado faz o rollBack
