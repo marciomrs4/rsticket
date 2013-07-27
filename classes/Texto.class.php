@@ -38,6 +38,16 @@ final class Texto
 		echo($msg);
 	}
 		
+	public static function letterRed($string)
+	{
+		return("<font color='red'>{$string}</font>");
+	}
+
+	public static function letterBlue($string)
+	{
+		return("<font color='blue'>{$string}</font>");
+	}
+	
 	public static function erro($msg)
 	{
 		return("<p class='erro'> {$msg} </p>");

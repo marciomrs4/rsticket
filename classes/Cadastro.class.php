@@ -110,10 +110,10 @@ class Cadastro extends Dados
 			ValidarCampos::campoVazio($this->dados['pro_descricao'],'Descrição');
 			ValidarCampos::campoVazio($this->dados['pro_previsao_inicio'],'Previsão Inicio');
 			ValidarCampos::campoVazio($this->dados['pro_previsao_fim'],'Previsão Fim');
-				
+
 			$this->dados['pro_previsao_inicio'] = ValidarDatas::dataBanco($this->dados['pro_previsao_inicio']);
 			$this->dados['pro_previsao_fim'] = ValidarDatas::dataBanco($this->dados['pro_previsao_fim']);
-				
+
 			try
 			{
 					
@@ -145,7 +145,7 @@ class Cadastro extends Dados
 		{
 			ValidarCampos::campoVazio($this->dados['tat_descricao'],'Tempo de Atendimento');
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
-				
+
 
 			$tbtempoatendimento = new TbTempoAtendimento();
 			$tbtempoatendimento->insert($this->dados);
@@ -162,11 +162,11 @@ class Cadastro extends Dados
 		{
 			ValidarCampos::campoVazio($this->dados['pri_descricao'],'Prioridade');
 			ValidarCampos::campoVazio($this->dados['tat_codigo'],'Tempo de Atendimento');
-			
+				
 			ValidarCampos::campoVazio($this->dados['dep_codigo_prioridade'],'Tempo de Atendimento');
 
 			$this->dados['dep_codigo'] = $this->dados['dep_codigo_prioridade'];
-			
+				
 			$tbprioridade = new TbPrioridade();
 			$tbprioridade->insert($this->dados);
 
@@ -184,7 +184,7 @@ class Cadastro extends Dados
 			ValidarCampos::campoVazio($this->dados['pro_descricao'],'Problema');
 			ValidarCampos::campoVazio($this->dados['dep_codigo_problema'],'Departamento');
 			ValidarCampos::campoVazio($this->dados['pri_codigo'],'Prioridade');
-			
+				
 			$this->dados['dep_codigo'] = $this->dados['dep_codigo_problema'];
 
 			$tbproblema = new TbProblema();
@@ -245,7 +245,7 @@ class Cadastro extends Dados
 			$this->dados['dep_codigo_solicitado'] = $this->dados['dep_codigo'];
 			#Capta o status do chamado, no caso em atendimento
 			$this->dados['sta_codigo'] = 1;
-				
+
 			try
 			{
 					
@@ -255,7 +255,7 @@ class Cadastro extends Dados
 				#Grava na tabela de solicitacao
 				$tbsolicitacao = new TbSolicitacao();
 				$this->dados['sol_codigo'] = $tbsolicitacao->insert($this->dados);
-				
+
 				if($file['tmp_name'] != '')
 				{
 					#Instancia da classe Arquivo que manipula os aquivos
@@ -278,16 +278,16 @@ class Cadastro extends Dados
 				#Grava a data de abertura da solicitação
 				$tbcalculoatendimento = new TbCalculoAtendimento();
 				$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
-				
-				
+
+
 				#Se tudo deu certo, faz commit
 				$this->conexao->commit();
 
-				
+
 				$email = new Email();
 				$email->aberturaChamado($this->dados);
-				
-				
+
+
 			}catch (PDOException $e)
 			{
 				#Se algo deu errado faz o rollBack
@@ -310,14 +310,14 @@ class Cadastro extends Dados
 		try
 		{
 			/* ass_descricao, ass_data_cadastro, sol_codigo, usu_codigo*/
-				
+
 			ValidarCampos::campoVazio($this->dados['ass_descricao'],'Descrição');
 			ValidarCampos::campoVazio($this->dados['usu_codigo_atendente'],'Atendente do Chamado');
-				
+
 			$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
-				
+
 			$this->dados['sta_codigo'];
-				
+
 			try
 			{
 				$tbassentamento = new TbAssentamento();
@@ -331,16 +331,16 @@ class Cadastro extends Dados
 				if($tbatendente->confirmarAtendente($this->dados['sol_codigo']))
 				{
 					$tbatendente->update($this->dados);
-						
+
 				}else{
-						
+
 					#Pega o codigo do problema da solicitacao
 					$pro_codigo = $tbsolicitacao->getProblema($this->dados['sol_codigo']);
 
 					#Com o codigo do problema eu pego o codigo da prioridade para
 					#Colocar na tabela de atendente
 					$this->dados['pri_codigo'] = $tbproblema->getPrioridade($pro_codigo);
-						
+
 					$tbatendente->insert($this->dados);
 				}
 
@@ -349,15 +349,18 @@ class Cadastro extends Dados
 				$tbsolicitacao->alterarStatus($this->dados);
 
 				#Instancia da Classe CalculoAtendimento
-				$tbcalculoatendimento = new TbCalculoAtendimento();				
-				#Grava a data de abertura da solicitação
-
-				if($tbcalculoatendimento->verificaEmAndamento($this->dados))
-				{}else
-				{
-					$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
-				}
+				$tbcalculoatendimento = new TbCalculoAtendimento();
 				
+				#Verifica se já houve um cadastro em abertura
+				//if($tbcalculoatendimento->verificaAberto($this->dados))
+				//{
+				//	$this->dados['sta_codigo'] = 5;
+					//$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
+				//}else
+				//{
+					$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
+				//}
+
 				#Faz commit se tudo deu certo
 				$this->conexao->commit();
 
@@ -367,8 +370,8 @@ class Cadastro extends Dados
 				$this->conexao->rollBack();
 				throw new PDOException($e->getMessage(), $e->getCode());
 			}
-				
-				
+
+
 		} catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -379,13 +382,13 @@ class Cadastro extends Dados
 	{
 		try
 		{
-				
-			ValidarCampos::campoVazio($this->dados['ass_descricao'],'Descrição');
-				
+
+			ValidarCampos::campoVazio($this->dados['ass_descricao'],'Assentamento');
+
 			$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
-				
+
 			$this->dados['sta_codigo'] = ($this->dados['sta_codigo'] == '') ? $this->dados['sta_codigo'] : 3;
-				
+
 			try
 			{
 				$tbassentamento = new TbAssentamento();
@@ -397,18 +400,18 @@ class Cadastro extends Dados
 
 				#Insere um assentamento
 				$tbassentamento->insert($this->dados);
-				
+
 				if($this->dados['sta_codigo'] == 3)
 				{
 					#Alterar status da solicitação
 					$tbsolicitacao->alterarStatus($this->dados);
-					
-					#Grava a data de alteracao de status da solicitação 
+						
+					#Grava a data de alteracao de status da solicitação
 					$tbcalculoatendimento = new TbCalculoAtendimento();
 					$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
-					
+						
 				}
-				
+
 				#Faz commit se tudo deu certo
 				$this->conexao->commit();
 
@@ -418,42 +421,160 @@ class Cadastro extends Dados
 				$this->conexao->rollBack();
 				throw new PDOException($e->getMessage(), $e->getCode());
 			}
+
+
+		} catch (Exception $e)
+		{
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
+	}
+
+	public function cadastrarChecklist()
+	{
+		try
+		{
+			ValidarCampos::campoVazio($this->dados['che_titulo'],'Titulo');
+			ValidarCampos::campoVazio($this->dados['che_email_envio'],'E-mail de Envio');
+			ValidarCampos::campoVazio($this->dados['che_descricao'],'Descrição');
+			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
+			ValidarCampos::campoVazio($this->dados['che_ativo'],'Departamento');			
+
+			ValidarString::validarEmail($this->dados['che_email_envio'],'E-mail com sintaxe incorreta');
 				
+			$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
+				
+			try
+			{
+				$tbchecklist = new TbChecklist();
+
+				$tbchecklist->insert($this->dados);
+
+			} catch (PDOException $e)
+			{
+				throw new PDOException($e->getMessage(), $e->getCode());
+			}
 				
 		} catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
-	
-	public function cadastrarChecklist()
-	{
-		try 
-		{
-			ValidarCampos::campoVazio($this->dados['che_titulo'],'Titulo');
-			ValidarCampos::campoVazio($this->dados['che_email_envio'],'E-mail de Envio');			
-			ValidarCampos::campoVazio($this->dados['che_descricao'],'Descrição');			
-			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');			
 
-			ValidarString::validarEmail($this->dados['che_email_envio'],'E-mail com sintaxe incorreta');
-			
-			$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
-			
-			try 
+	public function cadastrarItemChecklist($file)
+	{
+
+		try
+		{
+
+			ValidarCampos::campoVazio($this->dados['ich_titulo_tarefa'],'Tarefa');
+			//ValidarCampos::campoVazio($this->dados['ich_link'],'');
+			//$this->dados['ich_ativo']
+
+			try
 			{
-				$tbchecklist = new TbChecklist();
+
+				$this->conexao->beginTransaction();
+
+				$tbitemcklist = new TbItemChecklist();
+				$this->dados['ich_codigo'] = $tbitemcklist->insert($this->dados);
+
+				if($file['tmp_name'] != '')
+				{
+					#Instancia da classe Arquivo que manipula os aquivos
+					$arquivo = new Arquivo();
+					#Metodo setDados que serve para setar o $file que contém todo o arquivo
+					$arquivo->setDados($file);
+					/*
+					 * Capturando os dados do arquivo
+					 */
+					$this->dados['ane_anexo'] = $arquivo->arquivoBinario();
+					$this->dados['ane_nome'] = $arquivo->arquivoNome();
+					$this->dados['ane_tamanho'] = $arquivo->arquivoTamanho();
+					$this->dados['ane_tipo'] = $arquivo->arquivoTipo();
+
+					#Gravando o arquivo no banco dentro da tabela de anexo
+					$tbanexo = new TbAnexoCheckList();
+					$tbanexo->insert($this->dados);
+				}
+
+				$this->conexao->commit();
+
+
+			} catch (PDOException $e)
+			{
+				$this->conexao->rollBack();
+
+				throw new PDOException($e->getMessage(), $e->getCode());
+			}
 				
-				$tbchecklist->insert($this->dados);
+		} catch (Exception $e)
+		{
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
+
+	}
+
+	public function cadastrarExecutarChecklist()
+	{
+		$tarefa = '';
+		
+		try
+		{
+			$observacao = $this->dados['obs'];
+			$EmailEnvio = $this->dados['che_email_envio'];
+			$CheCodigo = $this->dados['che_codigo'];
+			$CheTitulo = $this->dados['che_titulo'];
+						
+			ValidarCampos::campoVazio($observacao,'Observação');
+			ValidarCampos::validaQtdCaracter($observacao,20,'Observação');
+
+			array_pop($this->dados);
+			array_pop($this->dados);
+			array_pop($this->dados);
+			array_pop($this->dados);									
+
+			try
+			{
+
+				foreach ($this->dados as $campo => $valor)
+				{
+					
+					ValidarCampos::campoVazio($valor,$campo);
+
+					$tarefa .= $campo." - ".ValidarCampos::retornarStatus($valor,Texto::letterBlue('OK'),Texto::letterRed('ERRO'))."<br />";
+
+				}
+
 				
-			} catch (PDOException $e) 
+				$tbhistoricocklist = new TbHistoricoCheckList();
+				
+				$this->dados['usu_email'] = $_SESSION['usu_email'];
+				$this->dados['hck_status'] = 1;
+				
+				$this->dados['che_codigo'] = $CheCodigo;
+				$this->dados['che_titulo'] = $CheTitulo;
+												
+				$tbhistoricocklist->insert($this->dados);
+				
+				$email = new Email();
+				$email->cabecalho = 'CheckList: '.$this->dados['che_titulo'];
+				$email->para = $EmailEnvio;
+				$email->mensagem ="Em: ".date("d-m-Y H:i:s")."<br />";
+				$email->mensagem .= "O usuário: <b>{$this->dados['usu_email']}</b> verificou as seguintes tarefas:<br />";
+				$email->mensagem .= "$tarefa <br />";
+				$email->mensagem .= $observacao;
+				$email->enviarEmail();
+			
+			}catch (PDOException $e)
 			{
 				throw new PDOException($e->getMessage(), $e->getCode());
 			}
 			
-		} catch (Exception $e) 
+		}catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
-		}
+		}	
+			
 	}
 
 }

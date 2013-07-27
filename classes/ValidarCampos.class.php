@@ -59,6 +59,21 @@ class ValidarCampos extends ClasseException
 			throw new Exception("O campo {$campo} requer {$qtd} caracteres",300);
 		}
 	}
+
+	public static function validaQtdCaracter($campo,$qtdcaracter,$nomecampo = null)
+	{
+		if(strlen(trim($campo)) <= $qtdcaracter)
+		{
+			throw new Exception("O campo {$nomecampo} deve ter mais de {$qtdcaracter} caracteres",300);
+		}
+	}	
+
+	public static function retornarStatus($valor,$true,$false)
+	{
+		$valor = ($valor % 2) ? $true : $false;
+			
+		return($valor);
+	}	
 	
 }
 ?>

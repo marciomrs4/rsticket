@@ -16,9 +16,7 @@ Texto::criarTitulo('Checklist');
 echo "</div>";
 
 
-
 Arquivo::includeForm();
-
 
 $grid = new DataGrid(array('Titulo','E-mail de Envio','Departamento'),$busca->listarChecklist());
 

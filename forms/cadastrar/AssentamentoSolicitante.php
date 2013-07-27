@@ -53,7 +53,7 @@ $dados = $tbsolicitacao->getFormAssentamento(base64_decode($_SESSION['valorform'
 	  <?php
 	  if($dados[2] != 3)
 	  { 
-	      echo('<input type="submit" name="alterar" value=" Salvar " />');
+	      echo('<input type="submit" name="alterar" class="button-tela" value=" Salvar " />');
 	  }
 	  ?>
 	  </td>

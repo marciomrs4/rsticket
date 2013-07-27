@@ -119,7 +119,6 @@ class Busca extends Dados
 		return($dados);
 	}
 
-
 	public function listarProblema()
 	{
 		$this->dados['dep_codigo'] = ($this->dados['dep_codigo'] == '') ? '%' : $this->dados['dep_codigo'];
@@ -167,5 +166,24 @@ class Busca extends Dados
 
 	}
 
+	public function listarItemCheckList()
+	{
+		$tbitemcklist = new TbItemChecklist();
+		
+		$dados = $tbitemcklist->listarChecklist(self::getValueGet('che_codigo'));
+		
+		return($dados);
+	}
+	
+	public function listarExecutarCheckList()
+	{
+		$tbitemcklist = new TbItemChecklist();
+		
+		$dados = $tbitemcklist->listarItemChecklist(self::getDados('che_codigo'));
+		
+		return($dados);
+	}
+	
+	
 }
 ?>

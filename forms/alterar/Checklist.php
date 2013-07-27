@@ -47,10 +47,27 @@ $_SESSION['cadastrar/Checklist'] = $tbchecklist->getForm(base64_decode($_SESSION
 			?>
 	      </td>
     </tr>
-
+ <tr>
+      <td nowrap="nowrap">Ativo:</td>
+      <td>
+      <?php 
+      	$tbsn = new TbSimNao();
+      	FormComponente::selectOption('che_ativo', $tbsn->selectSimNao(),false,$_SESSION['cadastrar/Checklist']);
+      ?>
+	  </td>
+    </tr>  
+     
     <tr>
       <td colspan="3" align="left">
-	      <input type="submit" name="alterar" id="button" value="Alterar" />
+	      <input type="submit" name="alterar" class="button-tela" value="Alterar" />
+	      <script language="JavaScript"> 
+					function pergunta(){ 
+   						if(confirm('Tem certeza que deseja deletar este item?')){ 
+      					document.Checklist.submit(); 
+   					} 
+				} 
+		</script> 
+	      <input type="button" class="button-tela" onclick="pergunta()" name="apagar" value="Apagar" />	      
       </td>
     </tr>
     

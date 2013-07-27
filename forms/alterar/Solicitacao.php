@@ -133,7 +133,7 @@ $usu_codigo = $tbatendimentosolicitante->confirmarAtendente($_SESSION['alterar/S
 		$dados = $tbanexo->getForm($_SESSION['alterar/Solicitacao']['sol_codigo']);
 		if($dados['ane_anexo']){
 		?>
-		 <tr>
+	<tr>
 		<th>Arquivo Anexo</th>
 		<td>
 		<a href="BaixarArquivo.php?<?php echo(base64_encode('id').'='.base64_encode($dados['ane_codigo'])); ?>" target="_blank" ><?php echo($dados['ane_nome']);?></a>

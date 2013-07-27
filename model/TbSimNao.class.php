@@ -10,6 +10,11 @@ class TbSimNao extends Banco
 		return array(1 => array(1,'SIM'),2 => array(2,'NÃO'));
 	}
 
+	public static function selectOkErro()
+	{
+		return array(1 => array(1,'OK'),2 => array(2,'ERRO'));
+	}
+	
 	public function select()
 	{
 		$query = ("SELECT * FROM $this->tabela");

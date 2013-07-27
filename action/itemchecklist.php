@@ -11,53 +11,35 @@ if($_POST)
 
 		switch ($acao)
 		{
-			case 'cadastrar/Assentamento' :
+			case 'cadastrar/ItemChecklist' :
+				
 				$cadastro = new Cadastro();
 
 				try
 				{
 					$cadastro->setDados($_POST);
 
-					//$cadastro->listarDados();
-						
-					$cadastro->cadastrarAssentamento();
-
-					$cadastro->finalizarApp('cadastrar/Assentamento');
+					$cadastro->cadastrarItemChecklist($_FILES['arquivo']);
+	
+					$cadastro->finalizarApp('cadastrar/ItemChecklist');
 
 				}catch (Exception $e)
 				{
-					ClasseException::throwException($e,$_POST,'cadastrar/Assentamento');
+					ClasseException::throwException($e,$_POST,'cadastrar/ItemChecklist');
 				}
 				break;
 
-			case 'cadastrar/AssentamentoSolicitante' :
-				$cadastro = new Cadastro();
-
-				try
-				{
-					$cadastro->setDados($_POST);
-						
-					$cadastro->cadastrarAssentamentoSolicitante();
-
-					$cadastro->finalizarApp('cadastrar/AssentamentoSolicitante');
-
-				}catch (Exception $e)
-				{
-					ClasseException::throwException($e,$_POST,'cadastrar/AssentamentoSolicitante');
-				}
-				break;
-
-			case 'alterar/Assentamento' :
-
+			case 'alterar/ItemChecklist' :
+				
 				$alteracao = new Alteracao();
 
 				try
 				{
 
 					$alteracao->setDados($_POST);
-
-					$alteracao->alterarAssentamento();
-						
+					
+					$alteracao->alterarItemChecklist($_FILES['arquivo']);
+	
 					$alteracao->finalizarApp();
 
 				}catch (Exception $e)

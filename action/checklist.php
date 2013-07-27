@@ -39,8 +39,6 @@ if($_POST)
 
 					$alteracao->setDados($_POST);
 
-					//$alteracao->listarDados();
-					
 					$alteracao->alterarChecklist();
 
 					$alteracao->finalizarApp();

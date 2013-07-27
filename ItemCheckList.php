@@ -16,22 +16,28 @@ $busca->setValueGet($_GET,'che_codigo');
 
 $tbchecklist = new TbChecklist();
 
-$dados = $tbchecklist->getForm($busca->getValueGet('che_codigo'));
+$_SESSION['cadastrar/ItemChecklist'] = $tbchecklist->getForm($busca->getValueGet('che_codigo'));
+
+$CheckList = $_SESSION['cadastrar/ItemChecklist'];
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/ck.png" title="Novo Chamado"  >','cadastrar/ItemChecklist');
-Texto::criarTitulo('Item Checklist');
+echo FormComponente::actionButton('<img src="./css/images/ck.png" title="Novo Item do Checklist"  >','cadastrar/ItemChecklist');
+Texto::criarTitulo('Item Checklist: '.$_SESSION['cadastrar/ItemChecklist']['che_titulo']);
 echo "</div>";
-?>
-<fieldset><legend>Criando Checklist</legend>
-Nome: <?php echo($dados['che_titulo']);?>
-
-</fieldset>
-
-
-<?php
 
 Arquivo::includeForm();
+
+$cabecalho = array('Descrição','Ativo','Link','Anexo');
+
+$datagrid = new DataGrid($cabecalho, $busca->listarItemCheckList());
+
+$datagrid->colunaoculta = 1;
+
+$datagrid->acao = 'alterar/ItemChecklist';
+
+$datagrid->titulofield = 'Itens do Checklist: - '.$CheckList['che_titulo'].' -';
+
+$datagrid->mostrarDatagrid();
 
 
 Sessao::finalizarSessao();

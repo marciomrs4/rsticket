@@ -37,7 +37,7 @@ class Alteracao extends Dados
 			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],'Senha e Repetir Senha');
 
 			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,'Senha');
-				
+
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
 			$tbacesso = new TbAcesso();
@@ -60,7 +60,7 @@ class Alteracao extends Dados
 			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],'Senha e Repetir Senha');
 
 			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,'Senha');
-				
+
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
 			$tbacesso = new TbAcesso();
@@ -117,11 +117,11 @@ class Alteracao extends Dados
 			ValidarCampos::campoVazio($this->dados['pro_descricao'],'Descrição');
 			ValidarCampos::campoVazio($this->dados['pro_previsao_inicio'],'Previsão Inicio');
 			ValidarCampos::campoVazio($this->dados['pro_previsao_fim'],'Previsão Fim');
-				
+
 			$this->dados['pro_previsao_inicio'] = ValidarDatas::dataBanco($this->dados['pro_previsao_inicio']);
 			$this->dados['pro_previsao_fim'] = ValidarDatas::dataBanco($this->dados['pro_previsao_fim']);
 
-				
+
 			$tbprojeto = new TbProjeto();
 
 			$tbprojeto->update($this->dados);
@@ -155,11 +155,11 @@ class Alteracao extends Dados
 		{
 			ValidarCampos::campoVazio($this->dados['pri_descricao'],'Prioridade');
 			ValidarCampos::campoVazio($this->dados['tat_codigo'],'Tempo de Atendimento');
-			
+				
 			ValidarCampos::campoVazio($this->dados['dep_codigo_prioridade'],'Tempo de Atendimento');
 
 			$this->dados['dep_codigo'] = $this->dados['dep_codigo_prioridade'];
-					
+				
 
 			$tbprioridade = new TbPrioridade();
 			$tbprioridade->update($this->dados);
@@ -177,9 +177,9 @@ class Alteracao extends Dados
 			ValidarCampos::campoVazio($this->dados['pro_descricao'],'Descricao');
 			ValidarCampos::campoVazio($this->dados['pri_codigo'],'Prioridade');
 			ValidarCampos::campoVazio($this->dados['dep_codigo_problema'],'Departamento');
-				
+
 			$this->dados['dep_codigo'] = $this->dados['dep_codigo_problema'];
-				
+
 			$tbproblema = new TbProblema();
 			$tbproblema->update($this->dados);
 
@@ -209,11 +209,11 @@ class Alteracao extends Dados
 		try
 		{
 			ValidarCampos::campoVazio($this->dados['usu_codigo_atendente'],'Encaminhar para');
-				
+
 
 			$tbsolicitacao = new TbSolicitacao();
 			$tbsolicitacao->updateEncaminharExecutor($this->dados);
-				
+
 		}catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -233,15 +233,16 @@ class Alteracao extends Dados
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
 			ValidarCampos::campoVazio($this->dados['pro_codigo'],'Problema');
 			ValidarCampos::campoVazio($this->dados['sol_descricao_solicitacao'],'Descrição do Problema');
-				
+
 			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solicitacao'],10,'Descrição do Problema');
-				
+
 			#Capturando o código do DEPTO solicitado
 			$this->dados['dep_codigo_solicitado'] = $this->dados['dep_codigo'];
-				
-			$this->dados['sol_dataabertura'] = date("Y-m-d");
-				
-				
+
+			try
+			{
+				$this->conexao->beginTransaction();
+
 			if($file['tmp_name'] != '')
 			{
 					
@@ -270,11 +271,19 @@ class Alteracao extends Dados
 					$tbanexo->insert($this->dados);
 				}
 			}
-				
-				
+
+
 			$tbsolicitacao = new TbSolicitacao();
 			$tbsolicitacao->update($this->dados);
-				
+			
+			$this->conexao->commit();
+
+			}catch (PDOException $e)
+			{
+				$this->conexao->rollBack();
+				throw new PDOException($e->getMessage(), $e->getCode());
+			}
+			
 		}catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -286,17 +295,17 @@ class Alteracao extends Dados
 
 		try
 		{
-				
+
 			ValidarCampos::campoVazio($this->dados['sol_descricao_solucao'],'Descrição da Solução');
 			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solucao'],10,'Descrição da Solução');
-				
+
 			ValidarCampos::campoVazio($this->dados['sta_codigo'],'Status');
-				
+
 			$this->dados['sol_datafechamento'] = date('Y-m-d');
-				
+
 			$tbsolicitacao = new TbSolicitacao();
 			$tbsolicitacao->updateAtendimento($this->dados);
-				
+
 		}catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -311,10 +320,10 @@ class Alteracao extends Dados
 
 		try
 		{
-				
+
 			$tbsolicitacao = new TbSolicitacao();
 			$tbsolicitacao->updateAprovarSolicitacao($this->dados);
-				
+
 		}catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -338,7 +347,7 @@ class Alteracao extends Dados
 			{
 				$layout->updateLayout($this->dados);
 			}
-				
+
 
 		} catch (PDOException $e)
 		{
@@ -352,9 +361,9 @@ class Alteracao extends Dados
 		{
 
 			$tbatendentesol = new TbAtendenteSolicitacao();
-				
+
 			$atendente = $tbatendentesol->confirmarAtendente($sol_codigo);
-				
+
 			try
 			{
 
@@ -364,7 +373,7 @@ class Alteracao extends Dados
 					throw new Exception('Já existe um atendente para a ocorrência','300');
 				}else
 				{
-						
+
 					try
 					{
 						$tbsolicitacao = new TbSolicitacao();
@@ -410,7 +419,7 @@ class Alteracao extends Dados
 				throw new Exception($e->getMessage(),$e->getCode());
 			}
 
-				
+
 		} catch (PDOException $e)
 		{
 			throw new PDOException($e->getMessage(), $e->getCode());
@@ -423,13 +432,13 @@ class Alteracao extends Dados
 		try
 		{
 			/* ass_descricao, ass_data_cadastro, sol_codigo, usu_codigo*/
-				
+
 			ValidarCampos::campoVazio($this->dados['ass_descricao'],'Descrição');
-				
+
 			$tbassentamento = new TbAssentamento();
 			$tbassentamento->alterarDescricao($dados);
-				
-				
+
+
 		} catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -446,24 +455,114 @@ class Alteracao extends Dados
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
 
 			ValidarString::validarEmail($this->dados['che_email_envio'],'E-mail com sintaxe incorreta');
-				
+
 			$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
-				
+
 			try
 			{
+
+				#Instancia do obj
 				$tbchecklist = new TbChecklist();
 
-				$tbchecklist->update($this->dados);
+				if($this->dados['alterar'])
+				{
+					#Atualiza
+					$tbchecklist->update($this->dados);
+						
+				}else
+				{
+					#Delete caso contario
+					$tbchecklist->delete($this->dados['che_codigo']);
+				}
 
 			} catch (PDOException $e)
 			{
 				throw new PDOException($e->getMessage(), $e->getCode());
 			}
-				
+
 		} catch (Exception $e)
 		{
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
+	}
+
+	public function alterarItemChecklist($file)
+	{
+
+		if($this->dados['alterar'])
+		{
+
+			try
+			{
+
+				ValidarCampos::campoVazio($this->dados['ich_titulo_tarefa'],'Tarefa');
+				//ValidarCampos::campoVazio($this->dados['ich_link'],'');
+				//$this->dados['ich_ativo']
+
+				try
+				{
+					$this->conexao->beginTransaction();
+
+					$tbitemcklist = new TbItemChecklist();
+					$tbitemcklist->update($this->dados);
+
+					if($file['tmp_name'] != '')
+					{
+						#Instancia da classe Arquivo que manipula os aquivos
+						$arquivo = new Arquivo();
+						#Metodo setDados que serve para setar o $file que contém todo o arquivo
+						$arquivo->setDados($file);
+						/*
+						 * Capturando os dados do arquivo
+						 */
+						$this->dados['ane_anexo'] = $arquivo->arquivoBinario();
+						$this->dados['ane_nome'] = $arquivo->arquivoNome();
+						$this->dados['ane_tamanho'] = $arquivo->arquivoTamanho();
+						$this->dados['ane_tipo'] = $arquivo->arquivoTipo();
+
+						#Instancia a classe de Anexo do CheckList
+						$tbanexocklist = new TbAnexoCheckList();
+							
+						#Verifica se existe um anexo pra esste item
+						if($this->dados['ane_codigo'])
+						{
+							#Se já existe, altera o anexo do checklist
+							$tbanexocklist->update($this->dados);
+						}else
+						{
+							#Se não existe, grava o anexo do checklist
+							$tbanexocklist->insert($this->dados);
+						}
+							
+					}
+
+					$this->conexao->commit();
+
+				} catch (PDOException $e)
+				{
+					$this->conexao->rollBack();
+
+					throw new PDOException($e->getMessage(), $e->getCode());
+				}
+					
+					
+			} catch (Exception $e)
+			{
+				throw new Exception($e->getMessage(), $e->getCode());
+			}
+
+		}else
+		{
+			try
+			{
+			$tbitemcklist = new TbItemChecklist();
+			$tbitemcklist->delete($this->dados['ich_codigo']);
+			}catch (PDOException $e)
+			{
+				throw new PDOException($e->getMessage(), $e->getCode());
+			}
+		}
+
 	}
 
 }

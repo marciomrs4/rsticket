@@ -4,12 +4,9 @@ class Email
 
 	public $mensagem;
 	public $cabecalho;
-	
-	public $para = 'marcio.santos@ceadis.org.br';
-
-	//public $emaildominio = 'suporte.infra@ceadis.org.br';
-	
-	public $emaildominio = 'sistema@rstecnologia.net';
+	public $para; // = 'marcio.santos@ceadis.org.br';
+	public $emaildominio = 'suporte.infra@ceadis.org.br';
+	//public $emaildominio = 'sistema@rstecnologia.net';
 	
 	public $erro;
 

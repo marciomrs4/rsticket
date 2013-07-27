@@ -61,7 +61,7 @@ $dados = $tbsolicitacao->getFormAssentamento(base64_decode($_SESSION['valorform'
     </tr>        
     <tr>
       <td colspan="2" align="center">
-	      <input type="submit" name="alterar" value=" Salvar " />
+	      <input type="submit" name="alterar" class="button-tela" value=" Salvar " />
 	  </td>
     </tr>
   </table>

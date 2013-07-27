@@ -37,6 +37,35 @@ class TbCalculoAtendimento extends Banco
 					}
 
 	}
+	
+
+	#Verifica se já houve um inserção de qualquer status
+	#Em uso no metodo de Cadastro
+	public function verificaAberto($dados)
+	{
+		$query = ("SELECT * FROM $this->tabela
+					WHERE sol_codigo = ? 
+					AND sta_codigo = 1");
+
+		try
+		{
+			$stmt = $this->conexao->prepare($query);
+				
+			$stmt->bindParam(1,$dados[$this->sol_codigo],PDO::PARAM_INT);
+				
+			$stmt->execute();
+				
+			$dados = $stmt->fetch();
+				
+			return($dados);
+				
+				
+		} catch (PDOException $e)
+		{
+			throw new PDOException($e->getMessage(), $e->getCode());
+		}
+
+	}
 
 	#Verifica se já houve um inserção de qualquer status
 	#Em uso no metodo de Cadastro

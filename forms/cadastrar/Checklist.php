@@ -41,10 +41,18 @@ Sessao::validarForm('cadastrar/Checklist');
 			?>
 	      </td>
     </tr>
-
+ <tr>
+      <td nowrap="nowrap">Ativo:</td>
+      <td>
+      <?php 
+      	$tbsn = new TbSimNao();
+      	FormComponente::selectOption('che_ativo', $tbsn->selectSimNao(),false,$_SESSION['cadastrar/Checklist']['che_ativo']);
+      ?>
+	  </td>
+    </tr>   
     <tr>
       <td colspan="3" align="left">
-	      <input type="submit" name="cadastrar" id="button" value="Cadastrar" />
+	      <input type="submit" name="cadastrar" class="button-tela" value="Cadastrar" />
       </td>
     </tr>
     

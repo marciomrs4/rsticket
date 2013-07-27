@@ -45,7 +45,8 @@ class TbAssentamento extends Banco
 					FROM tb_assentamento AS a
 					INNER JOIN tb_usuario AS b
 					ON a.usu_codigo = b.usu_codigo
-					WHERE $this->sol_codigo = ?");
+					WHERE $this->sol_codigo = ?
+					ORDER BY ass_codigo");
 
 		try
 		{
