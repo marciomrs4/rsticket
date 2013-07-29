@@ -9,7 +9,7 @@ $_SESSION['alterar/usuario'] = $tbusuario->getForm(base64_decode($_SESSION['valo
 	<tr>
 		<td>
 			<fieldset>
-				<legend>Alterar Usuário</legend>
+				<legend>Alterar <?php echo($_SESSION['config']['usuario']);?></legend>
 <form name="alterar/usuario" method="post" action="../<?php echo($_SESSION['projeto']); ?>/action/usuario.php">
   <table border="0" cellspacing="5">
     <tr>
@@ -41,7 +41,7 @@ $_SESSION['alterar/usuario'] = $tbusuario->getForm(base64_decode($_SESSION['valo
     </tr>
     
     <tr>
-      <th align="left" nowrap="nowrap">Ramal:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['ramal']);?>:</th>
 	      <td>
 	      	<input name="usu_ramal" type="text" value="<?php echo($_SESSION['alterar/usuario']['usu_ramal']); ?>"/>
 	      </td>

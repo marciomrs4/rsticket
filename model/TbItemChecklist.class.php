@@ -46,7 +46,7 @@ class TbItemChecklist extends Banco
 	{
 		$query = ("SELECT ich_codigo, ich_titulo_tarefa,
 					(CASE WHEN ich_ativo = 1 THEN 'ATIVO' ELSE 'INATIVO' END) AS ich_ativo,
-					ich_link, (SELECT ane_nome FROM tb_anexo_checklist WHERE a.ich_codigo = ich_codigo) AS ane_nome
+					ich_link, (SELECT ane_nome FROM tb_anexo_checklist WHERE A.ich_codigo = ich_codigo) AS ane_nome
 					FROM tb_item_checklist AS A
 					WHERE che_codigo = ?
 				");
@@ -63,7 +63,7 @@ class TbItemChecklist extends Banco
 
 		}catch (PDOException $e)
 		{
-			throw new PDOException($e->getMessage(), $e->getCode());
+			throw new PDOException($e->getMessage(),$e->getCode());
 		}
 
 

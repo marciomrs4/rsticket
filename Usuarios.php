@@ -6,8 +6,8 @@ ControleDeAcesso::permitirAcesso(array(ControleDeAcesso::$TecnicoADM));
 include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/new_usuario.png" title="Novo Usuário"  >','cadastrar/usuario');
-Texto::criarTitulo('Usuários');
+echo FormComponente::actionButton('<img src="./css/images/new_usuario.png" title="Novo '.$_SESSION['config']['usuario'].'">','cadastrar/usuario');
+Texto::criarTitulo($_SESSION['config']['usuario']);
 echo "</div>";
 
 
@@ -15,7 +15,7 @@ Arquivo::includeForm();
 
 $tbusuario = new TbUsuario();
 
-$datagrid = new DataGrid(array('Usuário','Departamento','Tipo de Acesso'),$tbusuario->selectUsuarios());
+$datagrid = new DataGrid(array($_SESSION['config']['usuario'],'Departamento','Tipo de Acesso'),$tbusuario->selectUsuarios());
 $datagrid->colunaoculta = 1;
 
 $datagrid->islink2 = true;

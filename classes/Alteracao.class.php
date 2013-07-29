@@ -11,7 +11,7 @@ class Alteracao extends Dados
 
 			ValidarString::validarEmail($this->dados['usu_email'],'E-mail');
 
-			ValidarCampos::campoVazio($this->dados['usu_ramal'],'Ramal');
+			ValidarCampos::campoVazio($this->dados['usu_ramal'],$_SESSION['config']['ramal']);
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
 			ValidarCampos::campoVazio($this->dados['tac_codigo'],'Tipo de Acesso');
 
@@ -30,13 +30,13 @@ class Alteracao extends Dados
 	{
 		try
 		{
-			ValidarCampos::campoVazio($this->dados['ace_usuario'],'Usuário');
-			ValidarCampos::campoVazio($this->dados['ace_senha'],'Senha');
-			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir Senha');
+			ValidarCampos::campoVazio($this->dados['ace_usuario'],$_SESSION['config']['usuario']);
+			ValidarCampos::campoVazio($this->dados['ace_senha'],$_SESSION['config']['senha']);
+			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir '.$_SESSION['config']['senha']);
 
-			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],'Senha e Repetir Senha');
+			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],$_SESSION['config']['senha'].' e Repetir '.$_SESSION['config']['senha']);
 
-			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,'Senha');
+			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,$_SESSION['config']['senha']);
 
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
@@ -54,12 +54,12 @@ class Alteracao extends Dados
 		try
 		{
 
-			ValidarCampos::campoVazio($this->dados['ace_senha'],'Senha');
-			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir Senha');
+			ValidarCampos::campoVazio($this->dados['ace_senha'],$_SESSION['config']['senha']);
+			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir '.$_SESSION['config']['senha']);
 
-			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],'Senha e Repetir Senha');
+			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],$_SESSION['config']['senha'].' e Repetir '.$_SESSION['config']['senha']);
 
-			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,'Senha');
+			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,$_SESSION['config']['senha']);
 
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
@@ -231,10 +231,10 @@ class Alteracao extends Dados
 		try
 		{
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
-			ValidarCampos::campoVazio($this->dados['pro_codigo'],'Problema');
-			ValidarCampos::campoVazio($this->dados['sol_descricao_solicitacao'],'Descrição do Problema');
+			ValidarCampos::campoVazio($this->dados['pro_codigo'],$_SESSION['config']['problema']);
+			ValidarCampos::campoVazio($this->dados['sol_descricao_solicitacao'],'Descrição do '.$_SESSION['config']['problema']);
 
-			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solicitacao'],10,'Descrição do Problema');
+			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solicitacao'],10,'Descrição do '.$_SESSION['config']['problema']);
 
 			#Capturando o código do DEPTO solicitado
 			$this->dados['dep_codigo_solicitado'] = $this->dados['dep_codigo'];
@@ -388,7 +388,7 @@ class Alteracao extends Dados
 						#Colocar na tabela de atendente
 						$pri_codigo = $tbproblema->getPrioridade($pro_codigo);
 
-						$this->dados['usu_codigo_atendente'] = $_SESSION['usu_codigo'] ;
+						$this->dados['usu_codigo_atendente'] = $_SESSION['usu_codigo'];
 						$this->dados['sol_codigo'] = $sol_codigo;
 						$this->dados['pri_codigo'] = $pri_codigo;
 						#Insere na tabela de atendente_solicitacao quem esta atedendendo
@@ -401,9 +401,19 @@ class Alteracao extends Dados
 						#Grava a alteração no Calculo de Atendimento
 						$tbcalculoatendimento = new TbCalculoAtendimento();
 						$tbcalculoatendimento->insertCalculoAtendimento($this->dados);
+						
+						$tbassentamento = new TbAssentamento();
+						$this->dados['ass_descricao'] = 'Em atendimento';
+						$this->dados['usu_codigo'] = $_SESSION['usu_codigo'];
+						$tbassentamento->insert($this->dados);
 
 						#Faz commit no banco caso sucesso
 						$this->conexao->commit();
+						
+						#Enviando e-mail quando atender chamado
+						$email = new Email();
+						$email->interacaoAssentamento($this->dados);
+						
 
 					}catch (PDOException $e)
 					{

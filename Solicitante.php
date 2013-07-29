@@ -33,9 +33,9 @@ echo "</div>";
 			FormComponente::$name = 'TODOS';
 			FormComponente::selectOption('sta_codigo', $tbstatus->selectMeuStatus(),true,$busca->getDados('sta_codigo'));
 			?>
-
-			Problema:
+			
 			<?php 
+			   echo($_SESSION['config']['problema'].':');
 		       $tbproblema = new TbProblema();
 		       FormComponente::$name = 'TODOS';
 		       FormComponente::selectOption('pro_codigo_busca',$tbproblema->listarProblema('dep_codigo'),true,$busca->getDados('pro_codigo_busca'));
@@ -68,7 +68,7 @@ try
 {
 	
 
-$cabecalho = array('Número','Problema','Status','Solicitante','Depto Solicitado','Descrição','Atendente');
+$cabecalho = array('Número',$_SESSION['config']['problema'],'Status','Solicitante','Depto Solicitado','Descrição','Atendente');
 
 $dados = $busca->listarChamadoSolicitante();
 

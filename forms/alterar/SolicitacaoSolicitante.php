@@ -24,7 +24,7 @@ $usu_codigo = $tbatendimentosolicitante->confirmarAtendente($_SESSION['alterar/S
       </td>
     </tr>
 <tr>
-	    	<th>
+	    	<th nowrap="nowrap">
 	    		Número do Chamado:
 	    	</th>
     		<td>
@@ -104,7 +104,7 @@ $usu_codigo = $tbatendimentosolicitante->confirmarAtendente($_SESSION['alterar/S
       </td>
     </tr>
     <tr>
-      <th align="left" nowrap="nowrap">Problema:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['problema']);?>:</th>
 	  <td>
 		<?php 
 		$tbproblema = new TbProblema();
@@ -113,7 +113,7 @@ $usu_codigo = $tbatendimentosolicitante->confirmarAtendente($_SESSION['alterar/S
 	  </td>
     </tr>
     <tr>
-      <th align="left" nowrap="nowrap">Descrição do Problema:</th>
+      <th align="left" nowrap="nowrap">Descrição do <?php echo($_SESSION['config']['problema']);?>:</th>
 	      <td>
 	      	<textarea name="sol_descricao_solicitacao" rows="10" cols="50"><?php echo($_SESSION['alterar/Solicitacao']['sol_descricao_solicitacao']); ?></textarea>
 	      </td>

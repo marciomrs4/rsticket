@@ -13,9 +13,22 @@ equalTo( other ): igual à um determinado valor
 
 var $valida = jQuery.noConflict();
 
+
+var usuario  = 'Utilizador';
+var problema = 'Serviço';
+var ramal = 'Extensão';
+var senha = 'Palavra-passe';
+
+/*
+var usuario  = 'Usuário';
+var problema = 'Problema';
+var ramal = 'Ramal';
+var senha = 'Senha';
+*/
+
 $valida(document).ready( function() 
 {
-
+	
 	$valida("#meuproblema").validate({
 		/* REGRAS DE VALIDAÇÃO DO FORMULÁRIO */
 		rules:{
@@ -30,8 +43,8 @@ $valida(document).ready( function()
 		/* DEFINIÇÃO DAS MENSAGENS DE ERRO */
 		messages:{
 			pro_descricao:{
-				required: "Preencha o campo <u>Problema</u>",
-				minlength: "O campo <u>Problema</u> deve conter no mínimo 5 caracteres"
+				required: "Preencha o campo <u>" +problema+ "</u>",
+				minlength: "O campo <u>" +problema+ "</u> deve conter no mínimo 5 caracteres"
 			},
 			dep_codigo_problema:{
 				required: "Campo Departamento é Obrigadorio"
@@ -82,11 +95,11 @@ $valida(document).ready( function()
 					required: "O campo departamento é obrigatório"
 				},
 				pro_codigo:{
-					required: "O campo problema é obrigatório"
+					required: "O campo " +problema+ " é obrigatório"
 				},
 				sol_descricao_solicitacao:{
-					required: "O campo Descrição do problema é obrigatório",
-					minlength: "O campo Descrição do problema precisa de ao menos 20 caracteres"
+					required: "O campo Descrição do " +problema+ " é obrigatório",
+					minlength: "O campo Descrição do " +problema+ " precisa de ao menos 20 caracteres"
 				}
 			}
 		});

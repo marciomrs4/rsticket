@@ -9,7 +9,7 @@ $_SESSION['alterar/SenhaUsuario'] = $tbacesso->getForm(base64_decode($_SESSION['
 	<tr>
 		<td>
 			<fieldset>
-				<legend>Alterar Senha do Usuário</legend>
+				<legend>Alterar <?php echo($_SESSION['config']['senha'].' do '.$_SESSION['config']['usuario']); ?></legend>
 <form name="arquivo" method="post" action="../<?php echo($_SESSION['projeto']); ?>/action/usuario.php">
   <table border="0" cellspacing="5">
     <tr>
@@ -19,7 +19,7 @@ $_SESSION['alterar/SenhaUsuario'] = $tbacesso->getForm(base64_decode($_SESSION['
     </tr>
 
    	<tr>
-      <th align="left" nowrap="nowrap">Usuário:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['usuario']);?></th>
 	      <td>
 	      	<input name="ace_codigo" type="hidden" value="<?php echo($_SESSION['alterar/SenhaUsuario']['ace_codigo']); ?>"/>	      
 	      	<input name="ace_usuario" type="text" value="<?php echo($_SESSION['alterar/SenhaUsuario']['ace_usuario']); ?>"/>
@@ -27,14 +27,14 @@ $_SESSION['alterar/SenhaUsuario'] = $tbacesso->getForm(base64_decode($_SESSION['
     </tr>
     
    	<tr>
-      <th align="left" nowrap="nowrap">Senha:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['senha']);?>:</th>
 	      <td>
 	      	<input name="ace_senha" type="password" value=""/>
 	      </td>
     </tr>    
     
    	<tr>
-      <th align="left" nowrap="nowrap">Repetir Senha:</th>
+      <th align="left" nowrap="nowrap">Repetir <?php echo($_SESSION['config']['senha']); ?>:</th>
 	      <td>
 	      	<input name="ace_senha2" type="password" value=""/>
 	      </td>

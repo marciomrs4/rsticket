@@ -118,28 +118,6 @@ class TbSolicitacao extends Banco
 
 	}
 
-	public function getForm($codigo)
-	{
-
-		$query = ("SELECT * FROM  $this->tabela
-				   WHERE $this-> = ?");
-
-		try
-		{
-			$stmt = $this->conexao->prepare($query);
-
-			$stmt->bindParam(1,$codigo,PDO::PARAM_INT);
-
-			$stmt->execute();
-
-			return($stmt->fetch());
-
-		} catch (PDOException $e)
-		{
-			throw new PDOException($e->getMessage(),$e->getCode());
-		}
-
-	}
 
 	#Metodo usado para mostrar a atividade no assentamento
 	public function getFormAssentamento($sol_codigo)
@@ -490,6 +468,30 @@ class TbSolicitacao extends Banco
 		}
 	}
 
+	#Verifica qual o Departamento da solicitacao, e retorna
+	public function getCodigoDepartamentoSolicitado($sol_codigo)
+	{
+		$query = ("SELECT $this->dep_codigo_solicitado FROM $this->tabela
+					WHERE $this->sol_codigo = ?");
+
+		try
+		{
+			$stmt = $this->conexao->prepare($query);
+
+			$stmt->bindParam(1,$sol_codigo,PDO::PARAM_INT);
+
+			$stmt->execute();
+
+			$dados = $stmt->fetch();
+
+			return($dados[0]);
+
+		} catch (PDOException $e)
+		{
+			throw new PDOException($e->getMessage(), $e->getCode());
+		}
+	}
+	
 	#Usado para alterar o status da solicitação
 	public function alterarStatus($dados)
 	{

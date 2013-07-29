@@ -5,7 +5,7 @@ Sessao::validarForm('cadastrar/usuario');
 	<tr>
 		<td>
 			<fieldset>
-				<legend>Cadastrar Usuário</legend>
+				<legend>Cadastrar <?php echo($_SESSION['config']['usuario']);?></legend>
 <form name="arquivo" method="post" action="../<?php echo($_SESSION['projeto']); ?>/action/usuario.php">
   <table border="0" cellspacing="5">
     <tr>
@@ -36,7 +36,7 @@ Sessao::validarForm('cadastrar/usuario');
     </tr>
     
     <tr>
-      <th align="left" nowrap="nowrap">Ramal:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['ramal']);?>:</th>
 	      <td>
 	      	<input name="usu_ramal" type="text" value="<?php echo($_SESSION['cadastrar/usuario']['usu_ramal']); ?>"/>
 	      </td>
@@ -67,21 +67,21 @@ Sessao::validarForm('cadastrar/usuario');
     </tr>    
     
    	<tr>
-      <th align="left" nowrap="nowrap">Usuário:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['usuario']);?>:</th>
 	      <td>
 	      	<input name="ace_usuario" type="text" value="<?php echo($_SESSION['cadastrar/usuario']['ace_usuario']); ?>"/>
 	      </td>
     </tr>
     
    	<tr>
-      <th align="left" nowrap="nowrap">Senha:</th>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['senha']);?>:</th>
 	      <td>
 	      	<input name="ace_senha" type="password" value=""/>
 	      </td>
     </tr>    
     
    	<tr>
-      <th align="left" nowrap="nowrap">Repetir Senha:</th>
+      <th align="left" nowrap="nowrap">Repetir <?php echo($_SESSION['config']['senha']);?>:</th>
 	      <td>
 	      	<input name="ace_senha2" type="password" value=""/>
 	      </td>

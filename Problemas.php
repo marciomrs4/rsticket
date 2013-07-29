@@ -6,8 +6,8 @@ ControleDeAcesso::permitirAcesso(array(ControleDeAcesso::$TecnicoADM));
 include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/new_ocorrencia.png" title="Novo Problema"  >','cadastrar/MeuProblema');
-Texto::criarTitulo("Problemas");
+echo FormComponente::actionButton('<img src="./css/images/new_ocorrencia.png" title="Novo '.$_SESSION['config']['problema'].'"  >','cadastrar/MeuProblema');
+Texto::criarTitulo($_SESSION['config']['problema']);
 echo "</div>";
 
 $busca = new Busca();
@@ -17,7 +17,7 @@ $busca->validarPost($_POST);
 ?>
 <form action="" method="post">
 <fieldset>
-	<legend>Pesquisar Problema</legend>
+	<legend>Pesquisar <?php echo($_SESSION['config']['problema']); ?></legend>
 <table border="0">
  
 	<tr>	
@@ -45,7 +45,7 @@ Arquivo::includeForm();
 
 
 $tbproblema = new TbProblema();
-$datagrid = new DataGrid(array('Problema','Departamento','Prioridade'),$busca->listarProblema());
+$datagrid = new DataGrid(array($_SESSION['config']['problema'],'Departamento','Prioridade'),$busca->listarProblema());
 $datagrid->colunaoculta = 1;
 $datagrid->acao = 'alterar/MeuProblema';
 $datagrid->mostrarDatagrid();

@@ -5,7 +5,7 @@ Sessao::validarForm('cadastrar/MeuProblema');
 	<tr>
 		<td>
 			<fieldset>
-				<legend>Cadastrar Problema</legend>
+				<legend>Cadastrar <?php echo($_SESSION['config']['problema']);?></legend>
 <form name="meuproblema" id="meuproblema" method="post" action="../<?php echo($_SESSION['projeto']); ?>/action/problema.php">
   <table border="0" cellspacing="5">
     <tr>
@@ -15,7 +15,7 @@ Sessao::validarForm('cadastrar/MeuProblema');
     </tr>
     
     <tr>
-      <th width="119" align="left" nowrap="nowrap">Problema:</th>
+      <th width="119" align="left" nowrap="nowrap">Descrição:</th>
       <td>
       	<input type="text" name="pro_descricao" value="<?php echo($_SESSION['cadastrar/MeuProblema']['pro_descricao']); ?>" />
       </td>

@@ -9,7 +9,7 @@ Texto::criarTitulo("Minhas Informações");
 
 ?>
 
-<a href="../<?php echo $_SESSION['projeto'] ?>/action/formcontroler.php?<?php echo base64_encode('alterar/MinhaSenha')?>">Alterar Senha</a>
+<a href="../<?php echo $_SESSION['projeto'] ?>/action/formcontroler.php?<?php echo base64_encode('alterar/MinhaSenha')?>">Alterar <?php echo($_SESSION['config']['senha'].' do '.$_SESSION['config']['usuario']);?></a>
 
 <a href="../<?php echo $_SESSION['projeto'] ?>/action/formcontroler.php?<?php echo base64_encode('alterar/MeuPerfilCor')?>">Alterar Perfil</a>
 <hr />

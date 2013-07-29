@@ -12,17 +12,17 @@ class Cadastro extends Dados
 
 			ValidarString::validarEmail($this->dados['usu_email'],'E-mail');
 
-			ValidarCampos::campoVazio($this->dados['usu_ramal'],'Ramal');
+			ValidarCampos::campoVazio($this->dados['usu_ramal'],$_SESSION['config']['ramal']);
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
 			ValidarCampos::campoVazio($this->dados['tac_codigo'],'Tipo de Acesso');
-			ValidarCampos::campoVazio($this->dados['ace_usuario'],'Usuário');
+			ValidarCampos::campoVazio($this->dados['ace_usuario'],$_SESSION['config']['usuario']);
 
-			ValidarCampos::campoVazio($this->dados['ace_senha'],'Senha');
-			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir Senha');
+			ValidarCampos::campoVazio($this->dados['ace_senha'],$_SESSION['config']['senha']);
+			ValidarCampos::campoVazio($this->dados['ace_senha2'],'Repetir '.$_SESSION['config']['senha']);
 
-			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,'Senha');
+			ValidarCampos::validarQtdCaracter($this->dados['ace_senha'],6,$_SESSION['config']['senha']);
 
-			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],'Senha e Repetir Senha');
+			ValidarCampos::compararCampos($this->dados['ace_senha'],$this->dados['ace_senha2'],$_SESSION['config']['senha'].' e Repetir '.$_SESSION['config']['senha']);
 
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
@@ -181,7 +181,7 @@ class Cadastro extends Dados
 		try
 		{
 
-			ValidarCampos::campoVazio($this->dados['pro_descricao'],'Problema');
+			ValidarCampos::campoVazio($this->dados['pro_descricao'],$_SESSION['config']['problema']);
 			ValidarCampos::campoVazio($this->dados['dep_codigo_problema'],'Departamento');
 			ValidarCampos::campoVazio($this->dados['pri_codigo'],'Prioridade');
 				
@@ -235,9 +235,9 @@ class Cadastro extends Dados
 
 			#Metodos de validação
 			ValidarCampos::campoVazio($this->dados['dep_codigo'],'Departamento');
-			ValidarCampos::campoVazio($this->dados['pro_codigo'],'Problema');
-			ValidarCampos::campoVazio($this->dados['sol_descricao_solicitacao'],'Descrição do Problema');
-			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solicitacao'],5,'Descrição do Problema');
+			ValidarCampos::campoVazio($this->dados['pro_codigo'],$_SESSION['config']['problema']);
+			ValidarCampos::campoVazio($this->dados['sol_descricao_solicitacao'],'Descrição do '.$_SESSION['config']['problema']);
+			ValidarCampos::validarQtdCaracter($this->dados['sol_descricao_solicitacao'],5,'Descrição do'.$_SESSION['config']['problema']);
 			$this->dados['sol_descricao_solicitacao'] = strip_tags($this->dados['sol_descricao_solicitacao']);
 			#Capturando o codigo do usuário solicitante
 			$this->dados['usu_codigo_solicitante'] = $usu_codigo_solicitante;
@@ -344,7 +344,8 @@ class Cadastro extends Dados
 					$tbatendente->insert($this->dados);
 				}
 
-
+				
+				
 				$tbassentamento->insert($this->dados);
 				$tbsolicitacao->alterarStatus($this->dados);
 
@@ -363,6 +364,11 @@ class Cadastro extends Dados
 
 				#Faz commit se tudo deu certo
 				$this->conexao->commit();
+				
+				
+				#Envia e-mail ao colocar um assentamento
+				$email = new Email();
+				$email->interacaoAssentamento($this->dados);
 
 			} catch (Exception $e)
 			{
@@ -414,6 +420,10 @@ class Cadastro extends Dados
 
 				#Faz commit se tudo deu certo
 				$this->conexao->commit();
+				
+				#Enviar e-mail para assentamentos.
+				$email = new Email();
+				$email->interacaoAssentamento($this->dados);
 
 			} catch (Exception $e)
 			{

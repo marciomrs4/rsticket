@@ -24,12 +24,12 @@
 			<ul >
 				<li><?php echo($_SESSION['erro']); unset($_SESSION['erro']);?></li>
 					<li id="li_1" >
-		<label class="description" for="element_1">Nome: </label>
+		<label class="description" for="element_1"><?php echo($_SESSION['config']['usuario']); ?> </label>
 		<div>
 			<input id="element_1" name="ace_usuario" class="element text medium" type="text" maxlength="255" value=""/> 
 		</div> 
 		</li>		<li id="li_2" >
-		<label class="description" for="element_2">Senha: </label>
+		<label class="description" for="element_2"><?php echo($_SESSION['config']['senha']); ?>: </label>
 		<div>
 			<input id="element_2" name="ace_senha" class="element text medium" type="password" maxlength="255" value=""/> 
 		</div> 
