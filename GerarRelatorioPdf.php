@@ -5,96 +5,161 @@ session_start();
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 include_once 'plugin/MPDF54/mpdf.php';
 
-
-
 if($_GET)
 {
-$solicitacao = new TbSolicitacao();
 
 $busca = new Busca();
 
 $busca->setValueGet($_GET,'sol_codigo');
-
-$tabela = $solicitacao->getFormAssentamento($busca->getValueGet('sol_codigo'));
 	
-}
+try
+{
 
 ob_start();
+
+$_SESSION['buscaRapida'] = $busca->getRelatorioPDF();
+
 ?>
-<p>Relatório de cliente</p><hr>
-<fieldset>
-    <legend>Dados do Cliente</legend>
-    <table border="0">
- 	  <tr>
-        <td><?php echo("Minha tarefa"); ?></td>
-      </tr>
-     </table>
+	<fieldset>
+				<legend><img src="./css/images/header.png"><span class="titulo">RsTicket</span></legend>
+				<hr/>
+  <table border="2" cellspacing="5">
+    <tr>
+      <td colspan="0" align="center">
+      	<?php Texto::mostrarMensagem($_SESSION['erro']); ?>
+      </td>
+    </tr>
+    	<tr>
+	    	<th nowrap="nowrap">
+	    		Número do Chamado:
+	    	</th>
+    		<td>
+	    		<?php echo($_SESSION['buscaRapida']['sol_codigo']); ?>
+	    	</td>
+	    </tr>
+	    <tr>
+	    		<th align="left">
+	    			Status do Chamado:
+	    		</th>
+	    		<td>
+	    			<?php 
+	    			$tbstatuschamado = new TbStatus();
+	    			echo $tbstatuschamado->getDescricao($_SESSION['buscaRapida']['sta_codigo']);
+	    			?>
+	    		</td>
+    		</tr>
+	    	<tr>
+	    		<th align="left">
+	    			Prioridade:
+	    		</th>
+	    		<td>
+	    			<?php 
+	    			$tbsolicitacao = new TbSolicitacao();
+	    			$solicitacao = $tbsolicitacao->getPrioridadeTempoAtendimento($_SESSION['buscaRapida']['sol_codigo']);
+	    			echo($solicitacao[2]);
+	    			?>
+	    		</td>
+    		</tr>    		    		
+	    	<tr>
+	    		<th align="left">
+	    			SLA:
+	    		</th>
+	    		<td>
+	    			<?php 
+	    			echo($solicitacao[3]);
+	    			?>
+	    		</td>
+    		</tr>
+			<tr>
+	    		<th align="left">
+	    			Atendente:
+	    		</th>
+	    		<td>
+	    			<?php 
+					if($_SESSION['buscaRapida']['usu_codigo'])
+					{
+					$tbusuario = new TbUsuario();
+					$Atendente = $tbusuario->getUsuario($_SESSION['buscaRapida']['usu_codigo']);
+					echo($Atendente[2]);
+					}else{
+						echo("Sem atendente");
+					}
+	    			?>
+	    		</td>
+    		</tr>    		    		    		
+    	<tr>
+	    	<th align="left">
+	    		Data de Abertura:
+	    	</th>
+    		<td>
+    		<?php 
+    		$tbcalcatendimento = new TbCalculoAtendimento();
+    		#Pega a data da solicitação pelo STATUS informado, no caso 1 é ABERTURA
+    		echo $tbcalcatendimento->getDataPorStatus($_SESSION['buscaRapida']['sol_codigo'],1);
+			?>
+    		</td>
+    	</tr>    	
+    <tr>
+      <th width="119" align="left" nowrap="nowrap">Departamento:</th>
+      <td>
+      	<input type="hidden" name="sol_codigo" value="<?php echo($_SESSION['buscaRapida']['sol_codigo']); ?>">
+		<?php 
+		$tbdepartamento = new TbDepartamento();
+		
+		echo($tbdepartamento->getDepDescricao($_SESSION['buscaRapida']['dep_codigo']));
+		?>
+      </td>
+    </tr>
+    <tr>
+      <th align="left" nowrap="nowrap"><?php echo($_SESSION['config']['problema']);?>:</th>
+	  <td>
+		<?php 
+		$tbproblema = new TbProblema();
+		echo($tbproblema->getProblemaDescricao($_SESSION['buscaRapida']['pro_codigo']));
+		?>
+	  </td>
+    </tr>
+    <tr>
+      <th align="left" nowrap="nowrap">Descrição do <?php echo($_SESSION['config']['problema']);?>:</th>
+	      <td>
+	      	<textarea name="sol_descricao_solicitacao" rows="10" cols="50"><?php echo($_SESSION['buscaRapida']['sol_descricao_solicitacao']); ?></textarea>
+	      </td>
+    </tr>
+  </table>
+       <div id="insere_aqui">
+  	<?php 
+  	try
+  	{
+	  	$tbassentamento = new TbAssentamento();
+	  	$tabela = $tbassentamento->listarAssentamento($_SESSION['buscaRapida']['sol_codigo']);
+	
+	  	$cabecalho = array('Descrição','Data','Editor');
+	  	
+	  	$grid = new DataGrid($cabecalho, $tabela);
+	  	
+	  	$grid->titulofield = 'Assentamento(s)';
+	  	$grid->acao = 'alterar/Assentamento';
+	  	$grid->islink = false;
+	  	$grid->colunaoculta = 1;
+	  	$grid->mostrarDatagrid();
+	  	
+  	}catch (Exception $e)
+  	{
+  		echo $e->getMessage();
+  	}
+  	?>     
+     </div>
 </fieldset>
-  			<hr>
-  <fieldset>
-    <legend>Contato    </legend>
-    <table width="200" border="0">
-      <tr>
-        <td nowrap="nowrap">Telefone</td>
-        <td><input type="text" name="con_tel" class="tel" /></td>
-      </tr>
-      <tr>
-        <td><label for="con_cel">Celular</label></td>
-        <td><input type="text" name="con_cel" class="cel" /></td>
-      </tr>
-      <tr>
-        <td>E-mail</td>
-        <td><input type="text" name="con_email" id="con_email" /></td>
-      </tr>
-      <tr>
-        <td>Site</td>
-        <td><input type="text" name="con_site" id="con_site" /></td>
-      </tr>
-      <tr>
-        <td>Contato</td>
-        <td><input type="text" name="con_contato" id="con_contato" /></td>
-      </tr>
-    </table>
-  </fieldset>
-  <fieldset>
-    <legend>Endereço</legend>
-    <table width="200" border="0">
-      <tr>
-        <td nowrap="nowrap"><label for="end_logradouro">Logradouro</label></td>
-        <td><input name="end_logradouro" type="text" id="end_logradouro" size="70" /></td>
-      </tr>
-      <tr>
-        <td>Bairro</td>
-        <td><input type="text" name="end_bairro" id="end_bairro" /></td>
-      </tr>
-      <tr>
-        <td><label for="end_cidade">Cidade</label></td>
-        <td><input type="text" name="end_cidade" id="end_cidade" /></td>
-      </tr>
-      <tr>
-        <td><label for="end_cep">Cep</label></td>
-        <td><input type="text" name="end_cep" class="cep" /></td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap"><label for="end_complemento">Complemento</label></td>
-        <td><input type="text" name="end_complemento" id="end_complemento" /></td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap"><label for="end_estado">Estado</label></td>
-        <td><select name="estado" id="select">
-          <?php #$tbestado->selectAllEstado(); ?>
-        </select></td>
-      </tr>
-      <tr>
-        <td>Tipo</td>
-        <td><select name="end_tipo" id="select3">
-          <option>Matriz</option>
-          <option>Filial</option>
-        </select></td>
-      </tr>
-    </table>
-</fieldset>    
-<?php
+ 
+<?php 
+
+unset($_SESSION['buscaRapida']);
+	
+
+}catch (Exception $e)
+{
+	echo Texto::erro($e->getMessage());
+}
 
 $html = ob_get_clean();
 
@@ -108,7 +173,7 @@ $css =  file_get_contents('../rsticket/css/formatacao.css');
 
 $mpdf->WriteHTML($css,1);
 
-$mpdf->setFooter(utf8_encode('Emitido por: '.$_SESSION['usu_nome_completo'].' - '.date("d-m-Y").' às '.date("H:i:s")));
+$mpdf->setFooter(utf8_encode('Emitido por: '.$_SESSION['usu_nome'] .' '.$_SESSION['usu_sobrenome'].' - '.date("d-m-Y").' às '.date("H:i:s")));
 
 $mpdf->WriteHTML(utf8_encode($html),2);
 
@@ -116,4 +181,5 @@ $mpdf->Output();
 
 exit();
 
+}
 ?>

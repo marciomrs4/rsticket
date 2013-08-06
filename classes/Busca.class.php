@@ -49,7 +49,6 @@ class Busca extends Dados
 
 				$tbsolicitacao = new TbSolicitacao();
 
-				$this->dados['dep_codigo_solicitado'] = $_SESSION['dep_codigo'];
 				$this->dados['usu_codigo_solicitante'] = $_SESSION['usu_codigo'];
 				$this->dados['sta_codigo'] = ($this->dados['sta_codigo'] == '') ? '%' : $this->dados['sta_codigo'];
 				$this->dados['pro_codigo'] = ($this->dados['pro_codigo_busca'] == '') ? '%' : $this->dados['pro_codigo_busca'];
@@ -83,7 +82,6 @@ class Busca extends Dados
 
 				$tbsolicitacao = new TbSolicitacao();
 
-				$this->dados['dep_codigo_solicitado'] = $_SESSION['dep_codigo'];
 				$this->dados['usu_codigo_atendente'] = $_SESSION['usu_codigo'];
 				$this->dados['sta_codigo'] = ($this->dados['sta_codigo'] == '') ? '%' : $this->dados['sta_codigo'];
 				$this->dados['pro_codigo'] = ($this->dados['pro_codigo_busca'] == '') ? '%' : $this->dados['pro_codigo_busca'];
@@ -182,6 +180,91 @@ class Busca extends Dados
 		$dados = $tbitemcklist->listarItemChecklist(self::getDados('che_codigo'));
 		
 		return($dados);
+	}
+	
+	public function buscaRapidaChamado()
+	{
+		
+		try 
+		{
+			ValidarNumeros::validaNumero($this->dados['sol_codigo'],'Número do Chamado');
+			
+			#Instacia da classe Solicitacao
+			$tbsolicitacao = new TbSolicitacao();			
+
+			#Pega o Resultado
+			$solicitacao = $tbsolicitacao->getFormReceptor($this->dados['sol_codigo']);
+			
+			#Verifica se o chamado existe
+			if(!$solicitacao['sol_codigo'])
+			{
+				throw new Exception('Chamado não encontrado');
+			}
+			
+			
+			try 
+			{
+				
+
+				$tbatendimentosolicitante = new TbAtendenteSolicitacao();
+				$solicitacao['usu_codigo'] = $tbatendimentosolicitante->confirmarAtendente($this->dados['sol_codigo']);
+				
+				return($solicitacao);
+				
+			} catch (PDOException $e) 
+			{
+				throw new PDOException($e->getMessage(),$e->getCode());
+			}
+			
+			
+		} catch (Exception $e) 
+		{
+			throw new Exception($e->getMessage(),$e->getCode());
+		}
+		
+		
+	}
+	
+	public function getRelatorioPDF()
+	{
+		
+		try 
+		{
+			
+			#Instacia da classe Solicitacao
+			$tbsolicitacao = new TbSolicitacao();			
+
+			#Pega o Resultado
+			$solicitacao = $tbsolicitacao->getFormReceptor($this->getValueGet('sol_codigo'));
+			
+			#Verifica se o chamado existe
+			if(!$solicitacao['sol_codigo'])
+			{
+				throw new Exception('Chamado não encontrado');
+			}
+			
+			
+			try 
+			{
+				
+
+				$tbatendimentosolicitante = new TbAtendenteSolicitacao();
+				$solicitacao['usu_codigo'] = $tbatendimentosolicitante->confirmarAtendente($this->getValueGet('sol_codigo'));
+				
+				return($solicitacao);
+				
+			} catch (PDOException $e) 
+			{
+				throw new PDOException($e->getMessage(),$e->getCode());
+			}
+			
+			
+		} catch (Exception $e) 
+		{
+			throw new Exception($e->getMessage(),$e->getCode());
+		}
+		
+		
 	}
 	
 	

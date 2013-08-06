@@ -7,12 +7,16 @@
         <ul>
         <?php
 		$controleacesso = new ControleDeAcesso();
-		 
+
+		$botaobusca = ("<li><a href='Busca.php'><img src='./css/images/search.png'> Pesquisar</a></li>");
+		$controleacesso->permitirBotao($botaobusca, array(ControleDeAcesso::$Solicitante,ControleDeAcesso::$Tecnico,ControleDeAcesso::$TecnicoADM));
+		
 		$botaosol = ("<li><a href='Solicitante.php'><img src='./css/images/chamado.png'> Chamado</a></li>");
 		$controleacesso->permitirBotao($botaosol, array(ControleDeAcesso::$Solicitante));
 		
 		$botaoOperacao = ("<li><a href='Operacao.php'><img src='./css/images/chamado.png'> Chamado</a></li>");
 		$controleacesso->permitirBotao($botaoOperacao, array(ControleDeAcesso::$Tecnico,ControleDeAcesso::$TecnicoADM));
+		
 		
 		$botaoprojeto = ("<li><a href='Projetos.php'><img src='./css/images/projeto.png'> Projetos</a></li>");					
 		$controleacesso->permitirBotao($botaoprojeto, array(ControleDeAcesso::$TecnicoADM));

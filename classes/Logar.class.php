@@ -17,8 +17,8 @@ class Logar extends Dados
 		try
 		{
 
-			ValidarCampos::campoVazio($this->dados['ace_usuario'],'Nome');
-			ValidarCampos::campoVazio($this->dados['ace_senha'],'Senha');
+			ValidarCampos::campoVazio($this->dados['ace_usuario'],$_SESSION['config']['usuario']);
+			ValidarCampos::campoVazio($this->dados['ace_senha'],$_SESSION['config']['senha']);
 	
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);		
 			
@@ -33,7 +33,7 @@ class Logar extends Dados
 			
 			if($confirma != 1)
 			{
-				throw new Exception("Usuário não encontrado");
+				throw new Exception($_SESSION['config']['usuario'].' não encontrado');
 				
 			}elseif ($confirma == 1)
 			{

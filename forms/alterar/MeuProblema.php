@@ -38,7 +38,7 @@ $_SESSION['cadastrar/MeuProblema'] = $tbproblema->getForm(base64_decode($_SESSIO
 	      <td>
 	      	<?php 
 	      	$tbprioridade = new TbPrioridade();
-	      	FormComponente::selectOption('pri_codigo', $tbprioridade->selectMinhasPrioridades(),false,$_SESSION['cadastrar/MeuProblema']);	      	
+	      	FormComponente::selectOption('pri_codigo', $tbprioridade->selectMinhasPrioridades($_SESSION['cadastrar/MeuProblema']['dep_codigo']),false,$_SESSION['cadastrar/MeuProblema']);	      	
 	      	?>
 	      </td>
     </tr>       

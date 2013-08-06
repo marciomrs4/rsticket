@@ -23,7 +23,7 @@ class ValidarNumeros extends ClasseException
 	{
 		if(!is_numeric($numero))
 		{
-			throw new Exception("O valor do campo {$campo} está incorreto",300);
+			throw new Exception("O valor do campo {$campo} não é um número válido",300);
 		}
 
 	}

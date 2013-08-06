@@ -66,10 +66,11 @@ echo "</div>";
 #Carrega dinamicamente os formularios	
 Arquivo::includeForm();
 
+
 try
 {
 	
-$cabecalho = array('Número',$_SESSION['config']['problema'],'Status','Solicitante','Depto Solicitante','Descrição','Atendente');
+$cabecalho = array('Número',$_SESSION['config']['problema'],'Status','Solicitante','Depto Solicitante','Descrição','Atendente','Data Abertura');
 
 $dados = $busca->listarChamado();
 

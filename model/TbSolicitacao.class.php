@@ -145,7 +145,7 @@ class TbSolicitacao extends Banco
 
 	}
 
-	#Chamado que estou Atendendo
+	#Chamado que estou Atendendo; Chamados que estou atendendo
 	public function selectMinhasTarefas($dados)
 	{
 		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
@@ -166,7 +166,7 @@ class TbSolicitacao extends Banco
 				    #Tabela de Atendente Solicitacao, traz quem esta atendendo a solicitacao
 				    left join tb_atendente_solicitacao as ATS
 				    on SOL.sol_codigo = ATS.sol_codigo
-				     WHERE dep_codigo_solicitado = ? AND ATS.usu_codigo_atendente = ?
+				     WHERE  ATS.usu_codigo_atendente = ?
                     AND SOL.sta_codigo LIKE ? AND SOL.pro_codigo LIKE ?
                     AND usu_nome LIKE ? AND sol_descricao_solicitacao LIKE ?
 				    ORDER BY SOL.sol_codigo DESC");
@@ -174,8 +174,7 @@ class TbSolicitacao extends Banco
 		{
 			$stmt = $this->conexao->prepare($query);
 				
-			$array = array($dados[$this->dep_codigo_solicitado],
-			$dados['usu_codigo_atendente'],
+			$array = array($dados['usu_codigo_atendente'],
 							"%{$dados[$this->sta_codigo]}%",
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
@@ -192,6 +191,7 @@ class TbSolicitacao extends Banco
 		}
 	}
 
+	#Usado na opção, Chamados que abri
 	public function selectMinhasSolicitacoes($dados)
 	{
 		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
@@ -212,7 +212,7 @@ class TbSolicitacao extends Banco
 				    #Tabela de Atendente Solicitacao, traz quem esta atendendo a solicitacao
 				    LEFT JOIN tb_atendente_solicitacao as ATS
 				    ON SOL.sol_codigo = ATS.sol_codigo
-				    WHERE dep_codigo_solicitado = ? AND usu_codigo_solicitante = ?
+				    WHERE usu_codigo_solicitante = ?
                     AND SOL.sta_codigo LIKE ? AND SOL.pro_codigo LIKE ?
                     AND usu_nome LIKE ? AND sol_descricao_solicitacao LIKE ?
 				    ORDER BY SOL.sol_codigo DESC");
@@ -221,8 +221,7 @@ class TbSolicitacao extends Banco
 		{
 			$stmt = $this->conexao->prepare($query);
 				
-			$array = array($dados[$this->dep_codigo_solicitado],
-							$dados[$this->usu_codigo_solicitante],
+			$array = array($dados[$this->usu_codigo_solicitante],
 							"%{$dados[$this->sta_codigo]}%",
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
@@ -238,7 +237,7 @@ class TbSolicitacao extends Banco
 		}
 	}
 
-	#Mostra os Chamados da area, por Status e Problema
+	#Mostra os Chamados da area, por Status e Problema, TODOS CHAMADO PRA EQUIPE.
 	public function selectSolicitacoesDepartmento($dados)
 	{
 
@@ -268,6 +267,7 @@ class TbSolicitacao extends Banco
 				");
 		try
 		{
+			
 			$stmt = $this->conexao->prepare($query);
 
 			$array = array($dados[$this->dep_codigo_solicitado],
@@ -285,7 +285,7 @@ class TbSolicitacao extends Banco
 		}
 	}
 	
-	#Mostra todos os Chamados da area, por Status e Problema
+	#Mostra todos os Chamados da area, por Status e Problema; Usado na opção todos.
 	public function selectSolicitacoesDepartmentoTodos($dados)
 	{
 
@@ -295,7 +295,8 @@ class TbSolicitacao extends Banco
 				        (SELECT dep_codigo FROM tb_usuario WHERE usu_codigo = usu_codigo_solicitante)
 				    ) AS Departamento_Solicitante,
 				    sol_descricao_solicitacao, 
-				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente
+				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente,
+	                (SELECT date_format(tea_data_acao,'%d-%m-%Y %H:%i:%s') FROM tb_calculo_atendimento WHERE sol_codigo = SOL.sol_codigo AND sta_codigo = 1) AS Abertura
 				    FROM tb_solicitacao AS SOL
 				    #Traz o nome do usuario solicitante
 				    INNER JOIN tb_usuario as USU
