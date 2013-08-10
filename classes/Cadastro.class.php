@@ -26,7 +26,22 @@ class Cadastro extends Dados
 
 			$this->dados['ace_senha'] = Validacao::hashSenha($this->dados['ace_senha']);
 
-
+			#Instancia Tabela usuario
+			$ValidarEmailUsuario = new TbUsuario();
+			#Valida se já existe um usuário cadastrado
+			if($ValidarEmailUsuario->validaEmailUsuario($this->dados['usu_email']))
+			{
+				throw new Exception('E-mail já cadastrado para outro '.$_SESSION['config']['usuario'],300);
+			}
+			
+			#Instancia Tabela de acesso
+			$ValidaUsuario = new TbAcesso();
+			#Valida se já existe um acesso com esse nome
+			if($ValidaUsuario->validaLoginAcesso($this->dados['ace_usuario']));
+			{
+				throw new Exception('Já existe um '.$_SESSION['config']['usuario'].' ['.$this->dados['ace_usuario'].'] cadastrado no sistema.',300);
+			}
+			
 
 			try
 			{

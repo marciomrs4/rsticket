@@ -68,9 +68,6 @@ class Email
 
 	public function interacaoAssentamento($dados)
 	{
-		#Pego informações do usuarios
-		$tbusuario = new TbUsuario();
-		$email = $tbusuario->getUsuario($dados['usu_codigo']);
 
 		#Pego informacoes da solicitacao, Codigo do problema
 		$tbsolcitacao = new TbSolicitacao();
@@ -78,6 +75,13 @@ class Email
 		$pro_codigo = $tbsolcitacao->getProblema($dados['sol_codigo']);
 		#Pego o codigo do DEPTO solicitado
 		$dep_codigo_solicitado = $tbsolcitacao->getCodigoDepartamentoSolicitado($dados['sol_codigo']);
+
+		#Pego informações do usuarios
+		$tbusuario = new TbUsuario();
+		$email = $tbusuario->getUsuario($tbsolcitacao->getUsuarioSolicitante($dados['sol_codigo']));
+		
+		$emailUsuarioCriador = $tbusuario->getUsuario($dados['usu_codigo']);
+		
 		
 		$tbdepartamento = new TbDepartamento();
 		$emaildepto = $tbdepartamento->getDepartamentoEmail($dep_codigo_solicitado);
@@ -87,14 +91,14 @@ class Email
 		$problema = $tbprobleama->getForm($pro_codigo);
 		
 		$tbstatus = new TbStatus();
-		$sta_descricao = $tbstatus->getDescricao($dados['sta_codigo']);
+		$sta_descricao = $tbstatus->getDescricao($tbsolcitacao->getStatus($dados['sol_codigo']));
 		
 		$this->para = $email['usu_email'].','.$emaildepto;
 
 		$this->cabecalho = 'Assentamento do chamado:'.$dados['sol_codigo'];
 
 		$this->mensagem = 'Houve uma iteração no chamado: '.$dados['sol_codigo'].'<br/>';
-		$this->mensagem .= 'Assentamento criado por: '.$email['usu_email'].'<br/>';
+		$this->mensagem .= 'Assentamento criado por: '.$emailUsuarioCriador['usu_email'].'<br/>';
 		$this->mensagem .= $_SESSION['config']['problema'].': '.$problema['pro_descricao'].'<br/>';		
 		$this->mensagem .= 'Foi adcionado o seguinte assentamento: '.$dados['ass_descricao'].'<br/>';
 		$this->mensagem .= 'Status do chamado: '.$sta_descricao;

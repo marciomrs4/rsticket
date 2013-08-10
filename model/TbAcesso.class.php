@@ -179,5 +179,31 @@ class TbAcesso extends Banco implements TbTabela
 
 	}
 
+	public function validaLoginAcesso($ace_usuario)
+	{
+		
+		$query = ("SELECT $this->ace_codigo 
+					FROM $this->tabela
+    				WHERE $this->ace_usuario = ?");
+		
+		try 
+		{
+			$stmt = $this->conexao->prepare($query);
+			
+			$stmt->bindParam(1,$ace_usuario,PDO::PARAM_STR);
+			
+			$stmt->execute();
+			
+			$dados = $stmt->fetch();
+			
+			return($dados[0]);
+			
+		} catch (PDOException $e) 
+		{
+			throw new PDOException($e->getMessage(),$e->getCode());
+		}
+		
+	}
+	
 }
 ?>

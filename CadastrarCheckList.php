@@ -11,7 +11,7 @@ $busca = new Busca();
 $busca->validarPost($_POST);
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/ck.png" title="Novo Checklist"  >','cadastrar/Checklist');
+echo FormComponente::actionButton('<img src="./css/images/addItem.png" title="Novo Checklist"  >','cadastrar/Checklist');
 Texto::criarTitulo('Checklist');
 echo "</div>";
 

@@ -155,7 +155,6 @@ $_SESSION['buscaRapida'] = $busca->getRelatorioPDF();
 
 unset($_SESSION['buscaRapida']);
 	
-
 }catch (Exception $e)
 {
 	echo Texto::erro($e->getMessage());
@@ -173,7 +172,7 @@ $css =  file_get_contents('../rsticket/css/formatacao.css');
 
 $mpdf->WriteHTML($css,1);
 
-$mpdf->setFooter(utf8_encode('Emitido por: '.$_SESSION['usu_nome'] .' '.$_SESSION['usu_sobrenome'].' - '.date("d-m-Y").' às '.date("H:i:s")));
+$mpdf->setFooter(utf8_encode('Emitido por: '.$_SESSION['usu_nome'] .' '.$_SESSION['usu_sobrenome'].' - Em: '.date("d-m-Y")));
 
 $mpdf->WriteHTML(utf8_encode($html),2);
 

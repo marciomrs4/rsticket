@@ -25,8 +25,8 @@ echo "</div>";
 		<td>
 			Ver por:
 			<?php 
-			   $tbverpor = new TbVerPor();
-		       FormComponente::selectOption('verpor',$tbverpor->selectVerPor(),false,$busca->getDados('verpor'));
+			$tbverpor = new TbVerPor();
+		    FormComponente::selectOption('verpor',$tbverpor->selectVerPor(),false,$busca->getDados('verpor'));
 			?>
 			Status:
 			<?php 
@@ -38,9 +38,9 @@ echo "</div>";
 			<?php 
 			echo($_SESSION['config']['problema'].':');
 				
-		       $tbproblema = new TbProblema();
-		       FormComponente::$name = 'Todos';
-		       FormComponente::selectOption('pro_codigo_busca',$tbproblema->listarProblema($_SESSION['dep_codigo']),true,$busca->getDados('pro_codigo_busca'));
+		    $tbproblema = new TbProblema();
+		    FormComponente::$name = 'Todos';
+		    FormComponente::selectOption('pro_codigo_busca',$tbproblema->listarProblema($_SESSION['dep_codigo']),true,$busca->getDados('pro_codigo_busca'));
 			?>
 	
 	<tr>

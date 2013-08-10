@@ -21,7 +21,7 @@ $_SESSION['cadastrar/ItemChecklist'] = $tbchecklist->getForm($busca->getValueGet
 $CheckList = $_SESSION['cadastrar/ItemChecklist'];
 
 echo"<div class='sub_menu_principal'>";
-echo FormComponente::actionButton('<img src="./css/images/ck.png" title="Novo Item do Checklist"  >','cadastrar/ItemChecklist');
+echo FormComponente::actionButton('<img src="./css/images/addItem.png" title="Novo Item do Checklist"  >','cadastrar/ItemChecklist');
 Texto::criarTitulo('Item Checklist: '.$_SESSION['cadastrar/ItemChecklist']['che_titulo']);
 echo "</div>";
 

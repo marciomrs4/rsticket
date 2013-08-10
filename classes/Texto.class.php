@@ -31,11 +31,11 @@ final class Texto
 
 	public static function mostrarMensagem($msg)
 	{
-		if(!isset($msg))
-		{
-			$msg = null;
-		}	
-		echo($msg);
+
+		$Mensagem = isset($msg) ? $msg : '';
+		
+		echo($Mensagem);
+		
 	}
 		
 	public static function letterRed($string)

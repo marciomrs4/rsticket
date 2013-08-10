@@ -142,7 +142,7 @@ $usu_codigo = $tbatendimentosolicitante->confirmarAtendente($_SESSION['alterar/S
 	    <?php }?>
 		<tr>
     	<th><?php if($dados['ane_anexo']){ echo('Alterar'); } ?>Anexo:</th>     		
-    	<td><input type="file" name="arquivo" /></td>
+    	<td><?php if($usu_codigo){}else{ ?><input type="file" name="arquivo" /><?php }?></td>
     </tr>
     <tr>
       <td colspan="2" align="center">

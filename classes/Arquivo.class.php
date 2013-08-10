@@ -8,7 +8,7 @@ class Arquivo extends Dados
 
 		$arquivo = $_SERVER['DOCUMENT_ROOT'].'/'.$_SESSION['projeto'].'/forms/'.Validacao::descriptograr($_SESSION['acao']).'.php';
 
-		if(isset($_SESSION['acao']))
+		if($_SESSION['acao'] != '')
 		{
 			self::validarFile($arquivo);
 		}

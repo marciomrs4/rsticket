@@ -2,7 +2,7 @@
 include_once($_SERVER['DOCUMENT_ROOT'].'/rsticket/componentes/config.php');
 
 $ControleAcesso = new ControleDeAcesso();
-$ControleAcesso->permitirAcesso(array(ControleDeAcesso::$TecnicoADM,ControleDeAcesso::$Tecnico));
+$ControleAcesso->permitirAcesso(array(ControleDeAcesso::$TecnicoADM,ControleDeAcesso::$Tecnico,ControleDeAcesso::$Solicitante));
 
 include($_SERVER['DOCUMENT_ROOT']."/{$_SESSION['projeto']}/componentes/script.php");
 
@@ -65,10 +65,19 @@ $_SESSION['buscaRapida'] = $busca->buscaRapidaChamado();
 				<a href="./action/atenderchamado.php?<?php echo(base64_encode('atender/chamado').'='.base64_encode($_SESSION['buscaRapida']['sol_codigo']));?>"><img src="./css/images/atender.png" title="Atender"></a>
 				
 				<?php
-				 } 
+				 }
+				?>
+				
+				<?php 
+				if($_SESSION['tac_codigo'] == ControleDeAcesso::$Solicitante)
+				{ ?>
+				<a href="./action/formcontroler.php?<?php echo(base64_encode('cadastrar/AssentamentoSolicitante').'='.base64_encode($_SESSION['buscaRapida']['sol_codigo']));?>"><img src="./css/images/novo.png" title="Assentamento"></a>
+				<?php
+				} 
+				else{
 				?>
 				<a href="./action/formcontroler.php?<?php echo(base64_encode('cadastrar/Assentamento').'='.base64_encode($_SESSION['buscaRapida']['sol_codigo']));?>"><img src="./css/images/novo.png" title="Assentamento"></a>
-				
+				<?php }?>
 				<a href="./GerarRelatorioPdf.php?<?php echo(base64_encode('codigo').'='.base64_encode($_SESSION['buscaRapida']['sol_codigo']));?>" target="blank"><img src="./css/images/pdf.png" title="Gerar PDF"></a>
 			</div>
 			</fieldset>

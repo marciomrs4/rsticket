@@ -7,7 +7,6 @@
 <script type="text/javascript" src="./forms/login/view.js"></script>
 <link rel='shortcut icon' href='css/images/LogoICO.ico'>
 
-
 </head>
 <body id="main_body" >
 	
@@ -22,7 +21,9 @@
 			<p>Bem vindo a RS Tecnologia</p>
 		</div>						
 			<ul >
-				<li><?php echo($_SESSION['erro']); unset($_SESSION['erro']);?></li>
+				<li><?php 
+				
+				Texto::mostrarMensagem($_SESSION['erro']); unset($_SESSION['erro']);?></li>
 					<li id="li_1" >
 		<label class="description" for="element_1"><?php echo($_SESSION['config']['usuario']); ?> </label>
 		<div>

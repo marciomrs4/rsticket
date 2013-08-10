@@ -21,26 +21,26 @@ class TbSolicitacao extends Banco
 					VALUES(?,?,?,?,?)
 				  ");
 
-		try
-		{
-			$stmt = $this->conexao->prepare($query);
+						try
+						{
+							$stmt = $this->conexao->prepare($query);
 
-			$stmt->bindParam(1,$dados[$this->pro_codigo],PDO::PARAM_INT);
-			$stmt->bindParam(2,$dados[$this->sta_codigo],PDO::PARAM_INT);
-			$stmt->bindParam(3,$dados[$this->usu_codigo_solicitante],PDO::PARAM_INT);
-			$stmt->bindParam(4,$dados[$this->dep_codigo_solicitado],PDO::PARAM_INT);
-			$stmt->bindParam(5,$dados[$this->sol_descricao_solicitacao],PDO::PARAM_STR);
+							$stmt->bindParam(1,$dados[$this->pro_codigo],PDO::PARAM_INT);
+							$stmt->bindParam(2,$dados[$this->sta_codigo],PDO::PARAM_INT);
+							$stmt->bindParam(3,$dados[$this->usu_codigo_solicitante],PDO::PARAM_INT);
+							$stmt->bindParam(4,$dados[$this->dep_codigo_solicitado],PDO::PARAM_INT);
+							$stmt->bindParam(5,$dados[$this->sol_descricao_solicitacao],PDO::PARAM_STR);
 
-			$stmt->execute();
+							$stmt->execute();
 
-			$this->sol_codigo =  $this->conexao->lastInsertId();
+							$this->sol_codigo =  $this->conexao->lastInsertId();
 
-			return($this->sol_codigo);
+							return($this->sol_codigo);
 
-		}catch (PDOException $e)
-		{
-			throw new PDOException("Erro na tabela ". get_class($this)."-". $e->getMessage(),$e->getCode());
-		}
+						}catch (PDOException $e)
+						{
+							throw new PDOException("Erro na tabela ". get_class($this)."-". $e->getMessage(),$e->getCode());
+						}
 
 	}
 
@@ -148,12 +148,13 @@ class TbSolicitacao extends Banco
 	#Chamado que estou Atendendo; Chamados que estou atendendo
 	public function selectMinhasTarefas($dados)
 	{
-		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
+		$query = ("SELECT SOL.sol_codigo, substr(PRO.pro_descricao,1,60), STA.sta_descricao,
 				    USU.usu_nome AS Usuario_Solicitante,
 				    (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = 
 				        (SELECT dep_codigo FROM tb_usuario WHERE usu_codigo = usu_codigo_solicitante)
 				    ) AS Departamento_Solicitante,
-				    sol_descricao_solicitacao, (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) as Atendente
+				    substr(sol_descricao_solicitacao,1,60), (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) as Atendente,
+	                (SELECT date_format(tea_data_acao,'%d-%m-%Y %H:%i:%s') FROM tb_calculo_atendimento WHERE sol_codigo = SOL.sol_codigo AND sta_codigo = 1) AS Abertura				    
 				    from tb_solicitacao as SOL
 				    #Traz o nome do usuario solicitante
 				    INNER JOIN tb_usuario as USU
@@ -173,14 +174,14 @@ class TbSolicitacao extends Banco
 		try
 		{
 			$stmt = $this->conexao->prepare($query);
-				
+
 			$array = array($dados['usu_codigo_atendente'],
 							"%{$dados[$this->sta_codigo]}%",
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
 							"%{$dados[$this->sol_descricao_solicitacao]}%");
-				
-				
+
+
 			$stmt->execute($array);
 
 			return($stmt);
@@ -194,12 +195,13 @@ class TbSolicitacao extends Banco
 	#Usado na opção, Chamados que abri
 	public function selectMinhasSolicitacoes($dados)
 	{
-		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
+		$query = ("SELECT SOL.sol_codigo, substr(PRO.pro_descricao,1,60), STA.sta_descricao,
 				     USU.usu_nome AS Usuario_Solicitante,
 				    (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = 
 				        (SELECT dep_codigo FROM tb_usuario WHERE usu_codigo = usu_codigo_solicitante)
 				    ) AS Departamento_Solicitante,
-				    sol_descricao_solicitacao, (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) as Atendente
+				    substr(sol_descricao_solicitacao,1,60), (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) as Atendente,
+   	                (SELECT date_format(tea_data_acao,'%d-%m-%Y %H:%i:%s') FROM tb_calculo_atendimento WHERE sol_codigo = SOL.sol_codigo AND sta_codigo = 1) AS Abertura
 				    FROM tb_solicitacao as SOL
 				    #Traz o nome do usuario solicitante
 				    INNER JOIN tb_usuario as USU
@@ -220,15 +222,15 @@ class TbSolicitacao extends Banco
 		try
 		{
 			$stmt = $this->conexao->prepare($query);
-				
+
 			$array = array($dados[$this->usu_codigo_solicitante],
 							"%{$dados[$this->sta_codigo]}%",
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
 							"%{$dados[$this->sol_descricao_solicitacao]}%");
-				
+
 			$stmt->execute($array);
-				
+
 			return($stmt);
 
 		} catch (PDOException $e)
@@ -241,13 +243,14 @@ class TbSolicitacao extends Banco
 	public function selectSolicitacoesDepartmento($dados)
 	{
 
-		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
+		$query = ("SELECT SOL.sol_codigo, substr(PRO.pro_descricao,1,60), STA.sta_descricao,
 				     USU.usu_nome AS Usuario_Solicitante,
 				    (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = 
 				        (SELECT dep_codigo FROM tb_usuario WHERE usu_codigo = usu_codigo_solicitante)
 				    ) AS Departamento_Solicitante,
-				    sol_descricao_solicitacao, 
-				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente
+				    substr(sol_descricao_solicitacao,1,60), 
+				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente,
+	                (SELECT date_format(tea_data_acao,'%d-%m-%Y %H:%i:%s') FROM tb_calculo_atendimento WHERE sol_codigo = SOL.sol_codigo AND sta_codigo = 1) AS Abertura				    
 				    FROM tb_solicitacao AS SOL
 				    #Traz o nome do usuario solicitante
 				    INNER JOIN tb_usuario as USU
@@ -267,7 +270,7 @@ class TbSolicitacao extends Banco
 				");
 		try
 		{
-			
+				
 			$stmt = $this->conexao->prepare($query);
 
 			$array = array($dados[$this->dep_codigo_solicitado],
@@ -275,7 +278,7 @@ class TbSolicitacao extends Banco
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
 							"%{$dados[$this->sol_descricao_solicitacao]}%");
-				
+
 			$stmt->execute($array);
 			return($stmt);
 
@@ -284,17 +287,17 @@ class TbSolicitacao extends Banco
 			throw new PDOException($e->getMessage(), $e->getCode());
 		}
 	}
-	
+
 	#Mostra todos os Chamados da area, por Status e Problema; Usado na opção todos.
 	public function selectSolicitacoesDepartmentoTodos($dados)
 	{
 
-		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
+		$query = ("SELECT SOL.sol_codigo, substr(PRO.pro_descricao,1,60), STA.sta_descricao,
 				     USU.usu_nome AS Usuario_Solicitante,
 				    (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = 
 				        (SELECT dep_codigo FROM tb_usuario WHERE usu_codigo = usu_codigo_solicitante)
 				    ) AS Departamento_Solicitante,
-				    sol_descricao_solicitacao, 
+				    substr(sol_descricao_solicitacao,1,60), 
 				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente,
 	                (SELECT date_format(tea_data_acao,'%d-%m-%Y %H:%i:%s') FROM tb_calculo_atendimento WHERE sol_codigo = SOL.sol_codigo AND sta_codigo = 1) AS Abertura
 				    FROM tb_solicitacao AS SOL
@@ -319,12 +322,12 @@ class TbSolicitacao extends Banco
 			$stmt = $this->conexao->prepare($query);
 
 			$array = array($dados[$this->dep_codigo_solicitado],
-							$dados[$this->usu_codigo_solicitante],
+			$dados[$this->usu_codigo_solicitante],
 							"%{$dados[$this->sta_codigo]}%",
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
 							"%{$dados[$this->sol_descricao_solicitacao]}%");
-				
+
 			$stmt->execute($array);
 			return($stmt);
 
@@ -333,9 +336,9 @@ class TbSolicitacao extends Banco
 			throw new PDOException($e->getMessage(), $e->getCode());
 		}
 	}
-	
-	
-	
+
+
+
 	public function updateEncaminharExecutor($dados)
 	{
 		$query = ("UPDATE $this->tabela
@@ -414,7 +417,7 @@ class TbSolicitacao extends Banco
 			$stmt->bindParam(1,$dep_codigo,PDO::PARAM_INT);
 
 			$stmt->execute();
-				
+
 			return($stmt);
 
 		} catch (PDOException $e)
@@ -492,7 +495,7 @@ class TbSolicitacao extends Banco
 			throw new PDOException($e->getMessage(), $e->getCode());
 		}
 	}
-	
+
 	#Usado para alterar o status da solicitação
 	public function alterarStatus($dados)
 	{
@@ -525,7 +528,7 @@ class TbSolicitacao extends Banco
 		$query = ("SELECT SOL.sol_codigo, PRO.pro_descricao, STA.sta_descricao,
 				     USU.usu_nome AS Usuario_Solicitante,
                     (SELECT dep_descricao FROM tb_departamento WHERE dep_codigo = dep_codigo_solicitado) AS DEPTO_Solicitado,
-				    sol_descricao_solicitacao, 
+				    substr(sol_descricao_solicitacao,1,60), 
 				    (SELECT usu_email FROM tb_usuario WHERE usu_codigo = ATS.usu_codigo_atendente) AS Atendente
 				    FROM tb_solicitacao AS SOL
 				    #Traz o nome do usuario solicitante
@@ -556,8 +559,8 @@ class TbSolicitacao extends Banco
 							"%{$dados[$this->pro_codigo]}%",
 							"%{$dados['usu_nome']}%",
 							"%{$dados[$this->sol_descricao_solicitacao]}%",
-							$dados['dep_codigo']);
-				
+			$dados['dep_codigo']);
+
 			$stmt->execute($array);
 			return($stmt);
 
@@ -587,9 +590,9 @@ class TbSolicitacao extends Banco
 			$stmt = $this->conexao->prepare($query);
 
 			$stmt->bindParam(1,$sol_codigo,PDO::PARAM_INT);
-							
+				
 			$stmt->execute();
-			
+				
 			return($stmt->fetch());
 
 		} catch (PDOException $e)
@@ -597,6 +600,56 @@ class TbSolicitacao extends Banco
 			throw new PDOException($e->getMessage(), $e->getCode());
 		}
 	}
-	
+
+	public function getStatus($sol_codigo)
+	{
+		$query = ("SELECT sta_codigo
+					FROM tb_solicitacao 
+					WHERE sol_codigo = ?");
+
+		try
+		{
+			$stmt = $this->conexao->prepare($query);
+
+			$stmt->bindParam(1,$sol_codigo,PDO::PARAM_INT);
+				
+			$stmt->execute();
+				
+			$dados = $stmt->fetch();
+				
+			return($dados[0]);
+
+		} catch (PDOException $e)
+		{
+			throw new PDOException($e->getMessage(), $e->getCode());
+		}
+
+	}
+
+	public function getUsuarioSolicitante($sol_codigo)
+	{
+		$query = ("SELECT $this->usu_codigo_solicitante
+					FROM tb_solicitacao 
+					WHERE sol_codigo = ?");
+
+		try
+		{
+			$stmt = $this->conexao->prepare($query);
+
+			$stmt->bindParam(1,$sol_codigo,PDO::PARAM_INT);
+				
+			$stmt->execute();
+				
+			$dados = $stmt->fetch();
+				
+			return($dados[0]);
+
+		} catch (PDOException $e)
+		{
+			throw new PDOException($e->getMessage(), $e->getCode());
+		}
+
+	}
+
 }
 ?>
