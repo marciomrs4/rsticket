@@ -4,8 +4,7 @@ class Email
 
 	public $mensagem;
 	public $cabecalho;
-	public $para; // = 'marcio.santos@ceadis.org.br';
-	//public $emaildominio = 'suporte.infra@ceadis.org.br';
+
 	public $emaildominio = 'sistema@rstecnologia.net';
 
 	public $erro;
@@ -56,11 +55,11 @@ class Email
 
 		$this->cabecalho = 'Abertura de Chamado: '.$dados['sol_codigo'];
 
-		$this->mensagem = 'O Chamado de número: '.$dados['sol_codigo'].'<br/>';
-		$this->mensagem .= 'Foi aberto com sucesso por: '.$email['usu_email'].' e logo um técnico irá atende-lo <br/>';
+		$this->mensagem = 'O Chamado de nÃºmero: '.$dados['sol_codigo'].'<br/>';
+		$this->mensagem .= 'Foi aberto com sucesso por: '.$email['usu_email'].' e logo um tÃ©cnico irÃ¡ atende-lo <br/>';
 		$this->mensagem .= 'Contato:  '.$email['usu_nome'].' - Tel / '.$_SESSION['config']['ramal'].': '.$email['usu_ramal'].'<br/>';
 		$this->mensagem .= $_SESSION['config']['problema'].': '.$problema['pro_descricao'].'<br/>';
-		$this->mensagem .= 'Descrição do '.$_SESSION['config']['problema'].': '.$dados['sol_descricao_solicitacao'].'<br/>';
+		$this->mensagem .= 'DescriÃ§Ã£o do '.$_SESSION['config']['problema'].': '.$dados['sol_descricao_solicitacao'].'<br/>';
 
 		$this->enviarEmail();
 
@@ -68,7 +67,7 @@ class Email
 
 	public function interacaoAssentamento($dados)
 	{
-		#Pego informações do usuarios
+		#Pego informaÃ§Ãµes do usuarios
 		$tbusuario = new TbUsuario();
 		$email = $tbusuario->getUsuario($dados['usu_codigo']);
 
@@ -82,7 +81,7 @@ class Email
 		$tbdepartamento = new TbDepartamento();
 		$emaildepto = $tbdepartamento->getDepartamentoEmail($dep_codigo_solicitado);
 
-		#Pego a descrição do problema 
+		#Pego a descriÃ§Ã£o do problema 
 		$tbprobleama = new TbProblema();
 		$problema = $tbprobleama->getForm($pro_codigo);
 		
@@ -93,7 +92,7 @@ class Email
 
 		$this->cabecalho = 'Assentamento do chamado:'.$dados['sol_codigo'];
 
-		$this->mensagem = 'Houve uma iteração no chamado: '.$dados['sol_codigo'].'<br/>';
+		$this->mensagem = 'Houve uma iteraÃ§Ã£o no chamado: '.$dados['sol_codigo'].'<br/>';
 		$this->mensagem .= 'Assentamento criado por: '.$email['usu_email'].'<br/>';
 		$this->mensagem .= $_SESSION['config']['problema'].': '.$problema['pro_descricao'].'<br/>';		
 		$this->mensagem .= 'Foi adcionado o seguinte assentamento: '.$dados['ass_descricao'].'<br/>';
